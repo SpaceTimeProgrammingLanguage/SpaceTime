@@ -1,0 +1,36 @@
+{
+  "name": "SpaceTime",
+  "version": "0.0.0",
+  "description": "SpaceTime =========",
+  "main": "app.js",
+  "scripts":
+  {
+    "test": "mocha --reporter spec app.js"
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/kenokabe/SpaceTime"
+  },
+  "keywords": [
+    "Functional",
+    "Programming",
+    "Language",
+    "FRP"
+  ],
+  "author": "Ken OKABE",
+  "license": "MIT",
+  "bugs":
+  {
+    "url": "https://github.com/kenokabe/SpaceTime/issues"
+  },
+  "homepage": "https://github.com/kenokabe/SpaceTime",
+  "dependencies":
+  {},
+  "devDependencies":
+  {
+    "mocha": "*",
+    "chai": "*"
+
+  }
+}
