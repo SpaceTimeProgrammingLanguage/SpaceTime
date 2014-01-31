@@ -514,9 +514,9 @@ try
             function()
             {
               var code = [
-                                            "hello world",
-                                            [map, [CONSOLE]]
-                                       ];
+                              "hello world",
+                              [map, [CONSOLE]]
+                         ];
 
               expect($mapMEMORY(code))
                 .to.eql(["hello world"]);
@@ -530,10 +530,10 @@ try
             function()
             {
               var code = [
-                                            "hello world",
-                                            [map, [CONSOLE]],
-                                            [map, [CONSOLE]]
-                                       ];
+                              "hello world",
+                              [map, [CONSOLE]],
+                              [map, [CONSOLE]]
+                         ];
 
               expect($mapMEMORY(code))
                 .to.eql(["hello world"]);
@@ -547,9 +547,9 @@ try
             function()
             {
               var code = [
-                                            [1, 2, 3],
-                                            [map, [CONSOLE]]
-                                       ];
+                              [1, 2, 3],
+                              [map, [CONSOLE]]
+                         ];
 
               expect($mapMEMORY(code))
                 .to.eql([[1, 2, 3]]);
