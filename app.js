@@ -22,12 +22,6 @@ var $type = function(obj)
         .slice(8, -1);
 };
 
-var $isType = function(obj, type)
-{
-    return obj !== undefined && obj !== null && $type(obj) === type;
-};
-
-
 var isType = function(src, atr)
 {
     var clas;
@@ -38,7 +32,7 @@ var isType = function(src, atr)
         {
             return false;
         }
-        else if (!$isType(el[0], 'Function'))
+        else if ($type(el[0]) !== 'Function')
         {
             return false;
         }
@@ -48,7 +42,7 @@ var isType = function(src, atr)
         }
     };
 
-    if ($isType(src, 'Array'))
+    if ($type(src) === 'Array')
     {
         if (isFunction(src))
             clas = FUNCTION_SEQUENCE;
@@ -185,7 +179,7 @@ var plus = function(src, atr)
         {
             var result;
 
-            if (!$isType(src1, 'Array'))
+            if ($type(src1) !== 'Array')
             {
 
                 result = src1 * 1 + atr1 * 1;
@@ -257,7 +251,7 @@ var take = function(src, atr)
     var src1 = $mapMEMORY(src[0]);
     var atr1 = $mapMEMORY(atr)[0];
 
-    if ($isType(src1, 'Array'))
+    if (isType(src1, DATA_SEQUENCE))
     {
         $log('-----take src is Array');
         $log('-----src1');
@@ -267,7 +261,7 @@ var take = function(src, atr)
 
         return [src1.slice(0, atr1)];
     }
-    else if ($isType(src1, 'Object'))
+    else
     {
         $log('-----take src is Object');
         var i = 0;
@@ -282,11 +276,6 @@ var take = function(src, atr)
 
             i++;
         }
-    }
-    else
-    {
-        $log('take src type?????????');
-        return false;
     }
 };
 
@@ -386,7 +375,7 @@ var ifF = function(src, atr)
     //var bool = atr[0];
     $log('!!!!!!!!!! ifF   !!!!!!!!!!!!!!!!!!!!!!!!!!!');
     $log(src);
-    $log($isType(src, 'Array'));
+    $log($type(src) === 'Array');
 
     $log('!!atr!!');
     $log(atr[0]);
@@ -401,7 +390,6 @@ var ifF = function(src, atr)
     }
 
 };
-
 
 
 //################ TEST #####################
