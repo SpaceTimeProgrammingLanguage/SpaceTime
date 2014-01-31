@@ -570,7 +570,7 @@ try
             describe(' (    1    (plus (2))   (map (CONSOLE)) )   =(3)',
                 function()
                 {
-                    it('(1 (plus (2))) (map (CONSOLE)))  =(3)',
+                    it('(1 (plus (2)) (map (CONSOLE)))  =(3)',
                         function()
                         {
                             var code = [1, [plus, [2]], [map, [CONSOLE]]];
