@@ -12,6 +12,7 @@ var NONE = 'NONE';
 var FUNCTION_SEQUENCE = 'FUNCTION_SEQUENCE';
 var DATA_SEQUENCE = 'DATA_SEQUENCE';
 
+//see http://bonsaiden.github.io/JavaScript-Garden/#types.typeof
 var $type = function(obj)
 {
     return Object
