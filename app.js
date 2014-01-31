@@ -565,6 +565,18 @@ try
                         });
                 });
 
+            describe(' (    1    (plus (2))   (map (CONSOLE)) )   =(3)',
+                function()
+                {
+                    it('(1 (plus (2))) (map (CONSOLE)))  =(3)',
+                        function()
+                        {
+                            var code = [1, [plus, [2]], [map, [CONSOLE]]];
+
+                            expect($mapMEMORY(code))
+                                .to.eql([3]);
+                        });
+                });
 
 
             describe(' (    1    (plus (2))    (plus (3))  )   =(6)',
