@@ -737,7 +737,7 @@ try
             describe(' (   FIB   (take (10))     )  & output ',
                 function()
                 {
-                    it('((FIB (take (10))) (map (CONSOLE)))  = ((1 1 2 3 5 8 13 21 34 55)) ',
+                    it('( FIB (take (10)) (map (CONSOLE)) )  = ((1 1 2 3 5 8 13 21 34 55)) ',
                         function()
                         {
                             var code =
