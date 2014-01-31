@@ -119,8 +119,6 @@ var $mapMEMORY = function(src)
 
                 var srcsrc = src.slice(0, src.length - 1);
 
-                if (!isType(atr, DATA_SEQUENCE))
-                    throw 'Invalid Format';
                 if (!isType(srcsrc, DATA_SEQUENCE))
                     throw 'Invalid Format';
                 //$log('---srcsrc--------');
@@ -162,10 +160,13 @@ var plus = function(src, atr)
     $log(src);
     $log(atr);
 
-    if (atr.length === 0)
+    if (!isType(atr, DATA_SEQUENCE))
     {
-        $log('atr is null Sequence (empty pair), invalid format  ');
-        return false;
+        throw 'Invalid Format';
+    }
+    else if (atr.length === 0)
+    {
+        throw 'atr is null Sequence (empty pair), invalid format  ';
     }
     else
     {
