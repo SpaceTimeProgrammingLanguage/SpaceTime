@@ -70,6 +70,12 @@ var $log = function(msg)
     console.log(msg);
 };
 
+var $content = function(seq)
+{
+    return seq[0];
+};
+
+
 var $mapNONE = function(src)
 {
     $log('!!!!!!!!!!!NONE');
@@ -83,7 +89,7 @@ var $mapCONSOLE = function(src)
     $log('<-----------$mapCONSOLE OUTPUT---------->');
     var result = $mapMEMORY(src);
 
-    $wt(result[0]); //side effect
+    $wt($content(result)); //side effect
 
     return result;
 };
@@ -188,19 +194,19 @@ var plus = function(src, atr)
         {
             var result;
 
-            if (!isType(src1[0], DATA_SEQUENCE))
+            if (!isType($content(src1), DATA_SEQUENCE))
             {
-                result = src1[0] + atr1[0];
+                result = $content(src1) + $content(atr1);
                 // $log(result);  
                 return [result];
             }
             else
             {
-                var src2 = $mapMEMORY(src1[0]);
+                var src2 = $mapMEMORY($content(src1));
                 result = [];
                 for (var i = 0; i < src2.length; i++)
                 {
-                    result[i] = src2[i] + atr1[0];
+                    result[i] = src2[i] + $content(atr1);
                 }
 
                 // $log('+++++++++++++++++++++++++++++');
@@ -256,8 +262,8 @@ var map = function(src, atr)
 
 var take = function(src, atr)
 {
-    var src1 = $mapMEMORY(src)[0];
-    var atr1 = $mapMEMORY(atr)[0];
+    var src1 = $content($mapMEMORY(src));
+    var atr1 = $content($mapMEMORY(atr));
 
     if (isType(src1, DATA_SEQUENCE))
     {
@@ -386,9 +392,10 @@ var ifF = function(src, atr)
     $log($type(src) === 'Array');
 
     $log('!!atr!!');
-    $log(atr[0]);
-
-    if (atr[0])
+    $log(atr[0]); // [true]
+    //$mapMEMORY( [true] )
+    //atr[0])[0] = true;
+    if ($mapMEMORY(atr[0])[0])
     {
         return $mapMEMORY(atr[1]);
     }
@@ -770,6 +777,38 @@ try
                                 [[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]]);
                         });
                 });
+            describe(' if ',
+                function()
+                {
+                    it('to write ',
+                        function()
+                        {
+                            var code = [
+                                            0,
+                                            [ifF, [[false], [1]]],
+                                            [ifF, [[true], [2]]]
+                                        ];
+
+                            expect($mapMEMORY(code))
+                                .to.eql([2]);
+                        });
+                });
+            describe(' if ',
+                function()
+                {
+                    it('to write ',
+                        function()
+                        {
+                            var code = [
+                                            0,
+                                            [ifF, [[true], [1]]],
+                                            [ifF, [[true], [2]]]
+                                        ];
+
+                            expect($mapMEMORY(code))
+                                .to.eql([2]);
+                        });
+                });
 
             describe(' if ',
                 function()
@@ -779,12 +818,29 @@ try
                         {
                             var code = [
                                             0,
-                                            [ifF, [true, [1]]],
-                                            [ifF, [false, [2]]]
+                                            [ifF, [[true], [1]]],
+                                            [ifF, [[false], [2]]]
                                         ];
 
                             expect($mapMEMORY(code))
                                 .to.eql([1]);
+                        });
+                });
+
+            describe(' if ',
+                function()
+                {
+                    it('to write ',
+                        function()
+                        {
+                            var code = [
+                                            0,
+                                            [ifF, [[false], [1]]],
+                                            [ifF, [[false], [2]]]
+                                        ];
+
+                            expect($mapMEMORY(code))
+                                .to.eql([0]);
                         });
                 });
             //------------------------------------------------------
