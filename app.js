@@ -784,10 +784,10 @@ try
             function()
             {
               var code = [
-                                            0,
-                                            [ifF, [[false], [1]]],
-                                            [ifF, [[true], [2]]]
-                                        ];
+                              0,
+                              [ifF, [[false], [1]]],
+                              [ifF, [[true], [2]]]
+                          ];
 
               expect($mapMEMORY(code))
                 .to.eql([2]);
@@ -800,10 +800,10 @@ try
             function()
             {
               var code = [
-                                            0,
-                                            [ifF, [[true], [1]]],
-                                            [ifF, [[true], [2]]]
-                                        ];
+                            0,
+                            [ifF, [[true], [1]]],
+                            [ifF, [[true], [2]]]
+                         ];
 
               expect($mapMEMORY(code))
                 .to.eql([2]);
@@ -817,10 +817,10 @@ try
             function()
             {
               var code = [
-                                            0,
-                                            [ifF, [[true], [1]]],
-                                            [ifF, [[false], [2]]]
-                                        ];
+                            0,
+                            [ifF, [[true], [1]]],
+                            [ifF, [[false], [2]]]
+                         ];
 
               expect($mapMEMORY(code))
                 .to.eql([1]);
@@ -834,10 +834,10 @@ try
             function()
             {
               var code = [
-                                            0,
-                                            [ifF, [[false], [1]]],
-                                            [ifF, [[false], [2]]]
-                                        ];
+                            0,
+                            [ifF, [[false], [1]]],
+                            [ifF, [[false], [2]]]
+                         ];
 
               expect($mapMEMORY(code))
                 .to.eql([0]);
