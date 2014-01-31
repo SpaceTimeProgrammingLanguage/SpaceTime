@@ -394,8 +394,8 @@ var ifF = function(src, atr)
   $log('!!atr!!');
   $log(atr[0]); // [true]
   //$mapMEMORY( [true] )
-  //atr[0])[0] = true;
-  if ($mapMEMORY(atr[0])[0])
+   
+  if ($content($mapMEMORY(atr[0])))
   {
     return $mapMEMORY(atr[1]);
   }
