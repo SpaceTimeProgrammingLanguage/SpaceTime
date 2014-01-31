@@ -67,7 +67,7 @@ var $wt = function(msg)
 
 var $log = function(msg)
 {
-    console.log(msg);
+    // console.log(msg);
 };
 
 var $content = function(seq)
