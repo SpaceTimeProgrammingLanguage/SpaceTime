@@ -67,7 +67,7 @@ var $wt = function(msg)
 
 var $log = function(msg)
 {
-    // console.$log(msg);
+    console.log(msg);
 };
 
 var $mapNONE = function(src)
@@ -81,8 +81,11 @@ var $mapCONSOLE = function(src)
 {
     $log(' ---$mapCONSOLE  fn ----- ');
     $log('<-----------$mapCONSOLE OUTPUT---------->');
-    $wt(src);
-    return [src];
+    var result = $mapMEMORY(src);
+
+    $wt(result[0]); //side effect
+
+    return result;
 };
 
 var $mapMEMORY = function(src)
@@ -93,6 +96,8 @@ var $mapMEMORY = function(src)
 
     if (isType(src, FUNCTION_SEQUENCE))
     {
+        $log('---result----FUNCTION_SEQUENCE----');
+        $log(src);
         return src;
     }
     else if (isType(src, DATA_SEQUENCE))
@@ -105,8 +110,10 @@ var $mapMEMORY = function(src)
         {
             var lastElement = src[src.length - 1];
 
-            if (!isType(lastElement, FUNCTION_SEQUENCE)) //unoperatable DATA_SEQUENCE
+            if (!isType(lastElement, FUNCTION_SEQUENCE))
             {
+                $log('---result---unoperatable DATA_SEQUENCE-----');
+                $log(src);
                 return src;
             }
             else
@@ -121,10 +128,10 @@ var $mapMEMORY = function(src)
                 //$log('---srcsrc--------');
                 //$log(srcsrc);
 
-                var result = f($mapMEMORY(srcsrc), $mapMEMORY(atr));
+                var result = f(srcsrc, atr);
 
-                //     $log('---result--------');
-                //    $log(result) 
+                $log('---result--------');
+                $log(result);
                 return result;
             }
 
@@ -133,6 +140,8 @@ var $mapMEMORY = function(src)
     else
     {
         $log('ATOM/OBJECT');
+        $log('---result--------');
+        $log(src);
         return src;
     }
 
@@ -167,31 +176,31 @@ var plus = function(src, atr)
     }
     else
     {
-        var src1 = $mapMEMORY(src[0]);
-        var atr1 = $mapMEMORY(atr)[0];
+        var src1 = $mapMEMORY(src);
+        var atr1 = $mapMEMORY(atr);
 
         $log('@@@src1');
         $log(src1);
         $log('@@@atr1');
         $log(atr1);
 
-        if (atr.length === 1)
+        if (atr1.length === 1)
         {
             var result;
 
-            if ($type(src1) !== 'Array')
+            if (!isType(src1[0], DATA_SEQUENCE))
             {
-
-                result = src1 * 1 + atr1 * 1;
+                result = src1[0] + atr1[0];
                 // $log(result);  
                 return [result];
             }
             else
             {
+                var src2 = $mapMEMORY(src1[0]);
                 result = [];
-                for (var i = 0; i < src1.length; i++)
+                for (var i = 0; i < src2.length; i++)
                 {
-                    result[i] = src1[i] * 1 + atr1 * 1;
+                    result[i] = src2[i] + atr1[0];
                 }
 
                 // $log('+++++++++++++++++++++++++++++');
@@ -221,20 +230,19 @@ var minus = function(src, atr)
 
 var map = function(src, atr)
 {
-    var src1 = src[0];
     var atr1 = atr[0];
 
     if (atr1 === MEMORY)
     {
-        return $mapMEMORY(src1);
+        return $mapMEMORY(src);
     }
     if (atr1 === EACH)
     {
-        return $mapMEMORY(src1);
+        return $mapMEMORY(src);
     }
     if (atr1 === CONSOLE)
     {
-        return $mapCONSOLE(src1); //side effect
+        return $mapCONSOLE(src); //side effect
 
     }
     if (atr1 === NONE)
@@ -248,7 +256,7 @@ var map = function(src, atr)
 
 var take = function(src, atr)
 {
-    var src1 = $mapMEMORY(src[0]);
+    var src1 = $mapMEMORY(src)[0];
     var atr1 = $mapMEMORY(atr)[0];
 
     if (isType(src1, DATA_SEQUENCE))
@@ -382,11 +390,11 @@ var ifF = function(src, atr)
 
     if (atr[0])
     {
-        return atr[1];
+        return $mapMEMORY(atr[1]);
     }
     else
     {
-        return src;
+        return $mapMEMORY(src);
     }
 
 };
@@ -401,7 +409,7 @@ var expect = require('chai')
 // works only on mocha command, otherwise error->catch
 try
 {
-    describe('mamMEMORY',
+    describe('mapMEMORY',
         function()
         {
 
@@ -588,6 +596,25 @@ try
                         });
                 });
 
+            describe(' (    1    (plus (2))    (plus (3))   (plus (5)) )   =(11)',
+                function()
+                {
+                    it('(1 (plus (2)) (plus (3)) (plus (5)))   =(11)',
+                        function()
+                        {
+                            var code =
+                            [
+                               1,
+                               [plus, [2]],
+                               [plus, [3]],
+                               [plus, [5]]
+                            ];
+
+                            expect($mapMEMORY(code))
+                                .to.eql([11]);
+                        });
+                });
+
 
             describe(' (    1    (plus ( 5    (plus (3))     )  )     )   =(9)',
                 function()
@@ -744,7 +771,22 @@ try
                         });
                 });
 
+            describe(' if ',
+                function()
+                {
+                    it('to write ',
+                        function()
+                        {
+                            var code = [
+                                            0,
+                                            [ifF, [true, [1]]],
+                                            [ifF, [false, [2]]]
+                                        ];
 
+                            expect($mapMEMORY(code))
+                                .to.eql([1]);
+                        });
+                });
             //------------------------------------------------------
         });
 
