@@ -12,7 +12,7 @@ var $wt = function(msg)
 
 var $log = function(msg)
 {
-  console.log(msg);
+  //console.log(msg);
 };
 
 var MEMORY = 'MEMORY';
