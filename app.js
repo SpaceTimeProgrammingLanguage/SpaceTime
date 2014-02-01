@@ -409,7 +409,7 @@ var ifF = function(src, atr)
 
 //################ TEST #####################
 
-if (typeof describe != "undefined")
+if (typeof describe !== "undefined")
 {
   var expect = require('chai')
     .expect;
