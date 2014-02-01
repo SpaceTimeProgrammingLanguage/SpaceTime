@@ -4,6 +4,17 @@
 //
 
 'use strict';
+
+var $wt = function(msg)
+{
+  console.log(msg);
+};
+
+var $log = function(msg)
+{
+  console.log(msg);
+};
+
 var MEMORY = 'MEMORY';
 var EACH = 'EACH';
 var CONSOLE = 'CONSOLE';
@@ -59,17 +70,6 @@ var isType = function(src, atr)
 };
 
 
-
-var $wt = function(msg)
-{
-  console.log(msg);
-};
-
-var $log = function(msg)
-{
-  // console.log(msg);
-};
-
 var $content = function(seq)
 {
   return seq[0];
@@ -86,9 +86,10 @@ var $mapNONE = function(src)
 var $mapCONSOLE = function(src)
 {
   $log(' ---$mapCONSOLE  fn ----- ');
-  $log('<-----------$mapCONSOLE OUTPUT---------->');
+
   var result = $mapMEMORY(src);
 
+  $log('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
   $wt($content(result)); //side effect
 
   return result;
@@ -248,8 +249,7 @@ var map = function(src, atr)
   }
   if (atr1 === CONSOLE)
   {
-    return $mapCONSOLE(src); //side effect
-
+    return $mapCONSOLE(src);
   }
   if (atr1 === NONE)
   {
@@ -394,7 +394,7 @@ var ifF = function(src, atr)
   $log('!!atr!!');
   $log(atr[0]); // [true]
   //$mapMEMORY( [true] )
-   
+
   if ($content($mapMEMORY(atr[0])))
   {
     return $mapMEMORY(atr[1]);
@@ -409,21 +409,18 @@ var ifF = function(src, atr)
 
 //################ TEST #####################
 
-
-var expect = require('chai')
-  .expect;
-
-// works only on mocha command, otherwise error->catch
-try
+if (typeof describe != "undefined")
 {
-  describe('mapMEMORY',
+  var expect = require('chai')
+    .expect;
+
+  $wt('#################### SpaceTime TEST #####################');
+  $wt('{src f}   src -f-> ??');
+
+
+  describe('===================================================================================',
     function()
     {
-
-      $wt('#################### SpaceTime TEST #####################');
-
-      $wt('{src f}   src -f-> ??');
-
       describe('{{...} {...}} = empty pair  {} -{}-> {{} {}} = {} = ()',
         function()
         {
@@ -437,6 +434,11 @@ try
             });
 
         });
+    });
+
+  describe('===================================================================================',
+    function()
+    {
 
       describe('{{} 5} = (5)    {} -5-> {{} 5}  =  (5)',
         function()
@@ -450,7 +452,11 @@ try
                 .to.eql([5]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe('{{{} 5} 7} = (5 7)    (5) -7-> {(5) 7}  =  (5 7)',
         function()
         {
@@ -463,7 +469,11 @@ try
                 .to.eql([5, 7]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe('{{{{} 5} 7} 3} = (5 7 3)    (5 7) -3-> {(5 7) 3}  =  (5 7 3)',
         function()
         {
@@ -477,7 +487,11 @@ try
             });
         });
 
+    });
 
+  describe('===================================================================================',
+    function()
+    {
 
       describe('(1 (2 3))    (1) -(2 3)-> {(1) (2 3)}  =  (1 (2 3)) ',
         function()
@@ -492,7 +506,11 @@ try
             });
         });
 
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe('("hello world")  ',
         function()
         {
@@ -506,7 +524,11 @@ try
             });
         });
 
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe('("hello world" (map (CONSOLE)))  ',
         function()
         {
@@ -522,7 +544,11 @@ try
                 .to.eql(["hello world"]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe('("hello world" (map (CONSOLE)) (map (CONSOLE)))',
         function()
         {
@@ -539,7 +565,11 @@ try
                 .to.eql(["hello world"]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe('((1 2 3) (map (CONSOLE)) ) ',
         function()
         {
@@ -556,7 +586,11 @@ try
             });
         });
 
+    });
 
+  describe('===================================================================================',
+    function()
+    {
 
       describe(' (    1    (plus (2))     )   =(3)',
         function()
@@ -570,7 +604,11 @@ try
                 .to.eql([3]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe(' (    1    (plus (2))   (map (CONSOLE)) )   =(3)',
         function()
         {
@@ -583,7 +621,11 @@ try
                 .to.eql([3]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
 
       describe(' (    1    (plus (2))    (plus (3))  )   =(6)',
         function()
@@ -602,7 +644,11 @@ try
                 .to.eql([6]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe(' (    1    (plus (2))    (plus (3))   (plus (5)) )   =(11)',
         function()
         {
@@ -622,7 +668,11 @@ try
             });
         });
 
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe(' (    1    (plus ( 5    (plus (3))     )  )     )   =(9)',
         function()
         {
@@ -640,7 +690,11 @@ try
                 .to.eql([9]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
 
       describe(' (     (    1    (plus (2))     )    (plus (2))     )   =((5))',
         function()
@@ -659,7 +713,11 @@ try
             });
         });
 
+    });
 
+  describe('===================================================================================',
+    function()
+    {
 
       describe(' (     (    1    (plus  (    1    (plus (2))     ) )     )    (plus (2))     )   =((6))',
         function()
@@ -678,7 +736,11 @@ try
             });
         });
 
+    });
 
+  describe('===================================================================================',
+    function()
+    {
 
       describe(' (     ( 1 2 3 )    (plus (2))     )   =((3 4 5))',
         function()
@@ -697,7 +759,11 @@ try
             });
         });
 
+    });
 
+  describe('===================================================================================',
+    function()
+    {
 
       describe(' (   ( 1 2 3 4 5 )    (take (3))     )   =((1 2 3))',
         function()
@@ -715,7 +781,11 @@ try
                 .to.eql([[1, 2, 3]]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
 
 
       describe(' (   NATURAL   (take (10))     ) ',
@@ -736,7 +806,11 @@ try
                 .to.eql([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
 
       describe(' (   FIB   (take (10))     )  ',
         function()
@@ -756,7 +830,11 @@ try
             });
         });
 
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe(' (   FIB   (take (10))     )  & output ',
         function()
         {
@@ -777,6 +855,11 @@ try
                                 [[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]]);
             });
         });
+    });
+
+  describe('===================================================================================',
+    function()
+    {
       describe(' if ',
         function()
         {
@@ -793,6 +876,11 @@ try
                 .to.eql([2]);
             });
         });
+    });
+
+  describe('===================================================================================',
+    function()
+    {
       describe(' if ',
         function()
         {
@@ -809,7 +897,11 @@ try
                 .to.eql([2]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe(' if ',
         function()
         {
@@ -826,7 +918,11 @@ try
                 .to.eql([1]);
             });
         });
+    });
 
+  describe('===================================================================================',
+    function()
+    {
       describe(' if ',
         function()
         {
@@ -845,9 +941,5 @@ try
         });
       //------------------------------------------------------
     });
-
-}
-catch (e)
-{
 
 }
