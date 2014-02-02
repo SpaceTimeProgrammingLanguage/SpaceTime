@@ -21,7 +21,7 @@ var NONE = 'NONE';
 var FUNCTION_SEQUENCE = 'FUNCTION_SEQUENCE';
 var DATA_SEQUENCE = 'DATA_SEQUENCE';
 
-var FIRST_ELEMENT = {
+var FIRST_SEQUENCE = {
   val: null
 };
 
@@ -90,7 +90,7 @@ var isType = function(src, atr)
     {
       if (el[0].length > 1)
       {
-        if (el[0][0] === FIRST_ELEMENT)
+        if (el[0][0] === FIRST_SEQUENCE)
         {
           return true;
         }
@@ -175,10 +175,10 @@ var $mapMEMORY = function(src)
     {
       return [];
     }
-    else if ((src.length === 1) && (src[0] === FIRST_ELEMENT)) //[FUNCTION]
+    else if ((src.length === 1) && (src[0] === FIRST_SEQUENCE))
     {
-      $log('!!!!!!!!!!!!!!src === [FIRST_ELEMENT]!!!!!!!!!!!!!!');
-      return FIRST_ELEMENT.val;
+      $log('!!!!!!!!!!!!!!src === [FIRST_SEQUENCE]!!!!!!!!!!!!!!');
+      return FIRST_SEQUENCE.val;
     }
     else
     {
@@ -224,8 +224,8 @@ var $mapMEMORY = function(src)
           $log('&&&&& Custom Function &&&&&');
           $log(_f);
 
-          // [FIRST_ELEMENT] = srcsrc;
-          FIRST_ELEMENT.val = srcsrc;
+          // [FIRST_SEQUENCE] = srcsrc;
+          FIRST_SEQUENCE.val = srcsrc;
 
           for (var i = 0; i < atr.length; i++)
           {
@@ -494,7 +494,7 @@ var ifF = function(src, atr)
 
 var myF1 =
 [
-      FIRST_ELEMENT,
+      FIRST_SEQUENCE,
       [plus, [1]],
       [plus, [2]]
 ];
