@@ -1,8 +1,6 @@
 /* jslint node: true */
 /* global describe, it, before, beforeEach, after, afterEach */
 
-//
-
 'use strict';
 
 var $wt = function(msg)
@@ -12,7 +10,7 @@ var $wt = function(msg)
 
 var $log = function(msg)
 {
-  //console.log(msg);
+  console.log(msg);
 };
 
 var MEMORY = 'MEMORY';
@@ -22,6 +20,22 @@ var NONE = 'NONE';
 
 var FUNCTION_SEQUENCE = 'FUNCTION_SEQUENCE';
 var DATA_SEQUENCE = 'DATA_SEQUENCE';
+
+var FIRST_ELEMENT = {
+  val: null
+};
+
+var object = {
+  test: 3
+};
+
+var VAL = [];
+
+for (var i = 0; i < 100; i++)
+{
+  VAL[i] = {};
+}
+
 
 //see http://bonsaiden.github.io/JavaScript-Garden/#types.typeof
 var $type = function(obj)
@@ -33,6 +47,31 @@ var $type = function(obj)
     .slice(8, -1);
 };
 
+
+var map = function(src, atr)
+{
+  var atr1 = atr[0];
+
+  if (atr1 === MEMORY)
+  {
+    return $mapMEMORY(src);
+  }
+  if (atr1 === EACH)
+  {
+    return $mapMEMORY(src);
+  }
+  if (atr1 === CONSOLE)
+  {
+    return $mapCONSOLE(src);
+  }
+  if (atr1 === NONE)
+  {
+    return $mapNONE(src);
+  }
+
+};
+
+
 var isType = function(src, atr)
 {
   var clas;
@@ -43,13 +82,27 @@ var isType = function(src, atr)
     {
       return false;
     }
-    else if ($type(el[0]) !== 'Function')
+    else if ($type(el[0]) === 'Function')
     {
-      return false;
+      return true;
     }
     else
     {
-      return true;
+      if (el[0].length > 1)
+      {
+        if (el[0][0] === FIRST_ELEMENT)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      }
+      else
+      {
+        return false;
+      }
     }
   };
 
@@ -69,11 +122,17 @@ var isType = function(src, atr)
 
 };
 
+var isNatveFunction = function(f)
+{
+  return ($type(f) === 'Function');
+};
+
 
 var $content = function(seq)
 {
   return seq[0];
 };
+
 
 
 var $mapNONE = function(src)
@@ -97,56 +156,99 @@ var $mapCONSOLE = function(src)
 
 var $mapMEMORY = function(src)
 {
-  $log('-----mapMEM-----');
-  $log('src is ...');
+  $log('############## mapMEM ################');
+  $log('----------- src --------------');
+
   $log(src);
+  $log('------------------------------');
 
   if (isType(src, FUNCTION_SEQUENCE))
   {
-    $log('---result----FUNCTION_SEQUENCE----');
+    $log('@@@@@========  FUNCTION_SEQUENCE ======= @@@@@');
     $log(src);
     return src;
   }
   else if (isType(src, DATA_SEQUENCE))
   {
+    $log('@@@@@======== DATA_SEQUENCE =========@@@@@');
     if (src.length === 0) //empty pair
     {
       return [];
     }
+    else if ((src.length === 1) && (src[0] === FIRST_ELEMENT)) //[FUNCTION]
+    {
+      $log('!!!!!!!!!!!!!!src === [FIRST_ELEMENT]!!!!!!!!!!!!!!');
+      return FIRST_ELEMENT.val;
+    }
     else
     {
+      $log('----------------------------------');
       var lastElement = src[src.length - 1];
+      $log('!!!!!!!!!!!!!!lastElement');
+      $log(lastElement);
 
       if (!isType(lastElement, FUNCTION_SEQUENCE))
       {
-        $log('---result---unoperatable DATA_SEQUENCE-----');
+        $log('@@@@@ unOperatable DATA_SEQUENCE @@@@@');
         $log(src);
         return src;
       }
       else
       {
-        var f = lastElement[0];
+        $log('@@@@@ Operatable DATA_SEQUENCE @@@@@');
+        // src = [SRC, [plus, ATR]]
+        var _f = lastElement[0];
         var atr = lastElement[1];
 
         var srcsrc = src.slice(0, src.length - 1);
 
-        if (!isType(srcsrc, DATA_SEQUENCE))
-          throw 'Invalid Format';
-        //$log('---srcsrc--------');
-        //$log(srcsrc);
+        var f;
 
-        var result = f(srcsrc, atr);
+        var result;
+        if (isNatveFunction(_f)) // _f = plus
+        {
+          f = _f;
+          if (!isType(srcsrc, DATA_SEQUENCE))
+            throw 'Invalid Format';
+          //$log('---srcsrc--------');
+          //$log(srcsrc);  [SRC]
 
-        $log('---result--------');
-        $log(result);
-        return result;
+          result = f(srcsrc, atr); //plus([1],[2])
+
+          $log('---result--------');
+          $log(result);
+          return result;
+        }
+        else // _f = [FUNCTION, [plus, VAL[0]], [plus, VAL[1]] ]
+        {
+          $log('&&&&& Custom Function &&&&&');
+          $log(_f);
+
+          // [FIRST_ELEMENT] = srcsrc;
+          FIRST_ELEMENT.val = srcsrc;
+
+          for (var i = 0; i < atr.length; i++)
+          {
+            VAL[i].value = atr[i];
+          }
+
+          // f = _f[0][1][0];
+          // result = f(srcsrc, atr); //plus([1],[2])
+
+          result = $mapMEMORY(_f);
+
+          $log('---result--------');
+          $log(result);
+          return result;
+        }
+
       }
 
     }
   }
   else
   {
-    $log('ATOM/OBJECT');
+    $log('@@@@@========= ATOM/OBJECT ========@@@@@');
     $log('---result--------');
     $log(src);
     return src;
@@ -167,14 +269,20 @@ var $mapEACH = function(src, atr)
   return true;
 };
 
-var plus = function(src, atr)
+
+
+var plus = function(src, atr) //plus([1], [2]) = [3]
 {
   $log('==========plus');
   $log(src);
   $log(atr);
 
+  $wt(src);
+  $wt(atr);
+
   if (!isType(atr, DATA_SEQUENCE))
   {
+
     throw 'Invalid Format';
   }
   else if (atr.length === 0)
@@ -232,30 +340,6 @@ var minus = function(src, atr)
   var result = src - atr;
 
   return result;
-};
-
-
-var map = function(src, atr)
-{
-  var atr1 = atr[0];
-
-  if (atr1 === MEMORY)
-  {
-    return $mapMEMORY(src);
-  }
-  if (atr1 === EACH)
-  {
-    return $mapMEMORY(src);
-  }
-  if (atr1 === CONSOLE)
-  {
-    return $mapCONSOLE(src);
-  }
-  if (atr1 === NONE)
-  {
-    return $mapNONE(src);
-  }
-
 };
 
 
@@ -405,6 +489,34 @@ var ifF = function(src, atr)
   }
 
 };
+
+
+
+var myF1 =
+[
+      FIRST_ELEMENT,
+      [plus, [1]],
+      [plus, [2]]
+];
+
+var code =
+[
+     99,
+     [plus, [1]],
+     [map, [CONSOLE]]
+];
+
+//$mapMEMORY(code);
+$wt('============!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=================');
+var code =
+[
+     5,
+     [myF1, []],
+     [map, [CONSOLE]]
+];
+
+$mapMEMORY(code);
+
 
 
 //################ TEST #####################
