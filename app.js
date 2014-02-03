@@ -492,23 +492,6 @@ var ifF = function(src, atr)
 
 
 
-/*
-var array = [];
-$L(array.length);
-
-push(array, 'foo');
-$L(array.length);
-
-push(array, 'bar');
-$L(array.length);
-
-$L(pop(array));
-$L(array.length);
-
-$L(pop(array));
-$L(array.length);
-*/
-
 //################ TEST #####################
 
 if (typeof describe !== "undefined")
