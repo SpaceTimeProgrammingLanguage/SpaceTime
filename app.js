@@ -166,25 +166,6 @@ var $content = function(seq)
 
 
 
-var $mapNONE = function(src)
-{
-  $L('!!!!!!!!!!!NONE');
-  //do nothing, won't map/dig src
-  return true;
-};
-
-var $mapCONSOLE = function(src)
-{
-  $L(' ---$mapCONSOLE  fn ----- ');
-
-  var result = $mapMEMORY(src);
-
-  $L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
-  $wt($content(result)); //side effect
-
-  return result;
-};
-
 var $mapMEMORY = function(src)
 {
   $L('############## mapMEM ################');
@@ -311,6 +292,25 @@ var $mapEACH = function(src, atr)
   return true;
 };
 
+
+var $mapCONSOLE = function(src)
+{
+  $L(' ---$mapCONSOLE  fn ----- ');
+
+  var result = $mapMEMORY(src);
+
+  $L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
+  $wt($content(result)); //side effect
+
+  return result;
+};
+
+var $mapNONE = function(src)
+{
+  $L('!!!!!!!!!!!NONE');
+  //do nothing, won't map/dig src
+  return true;
+};
 
 
 var plus = function(src, atr) //plus([1], [2]) = [3]
