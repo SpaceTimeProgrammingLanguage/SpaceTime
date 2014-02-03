@@ -3,7 +3,7 @@
 
 'use strict';
 
-var debug = false;
+var debug = true;
 
 
 var $wt = function(msg)
@@ -46,27 +46,16 @@ var NONE = 'NONE';
 var FUNCTION_SEQUENCE = 'FUNCTION_SEQUENCE';
 var DATA_SEQUENCE = 'DATA_SEQUENCE';
 
-var FUNCTION_COMPOSITION = {
-  val: null
-};
+var FUNCTION_COMPOSITION = [];
 
-var object = {
-  test: 3
-};
-
-var VAL = [];
-
-for (var i = 0; i < 100; i++)
+var Val = [];
+var VAL = function(index)
 {
-  VAL[i] = {
+  return Val[index] || (Val[index] = {
     wrapped_value: []
-  };
-}
-
-var getObjectAtIndex = function(arr, index)
-{
-  return arr[index] || (arr[index] = {});
+  });
 };
+
 
 //see http://bonsaiden.github.io/JavaScript-Garden/#types.typeof
 var $type = function(obj)
@@ -189,8 +178,7 @@ var $mapMEMORY = function(src)
     else if ((src.length === 1) && (src[0] === FUNCTION_COMPOSITION))
     {
       $L('!!!!!!!!!!!!!!=====================src === [FUNCTION_COMPOSITION]!!!!!!!!!!!!!!');
-      $L(FUNCTION_COMPOSITION.val);
-      return $mapMEMORY(FUNCTION_COMPOSITION.val);
+      return $mapMEMORY(pop(FUNCTION_COMPOSITION));
     }
     else
     {
@@ -238,13 +226,12 @@ var $mapMEMORY = function(src)
 
           // [FUNCTION_COMPOSITION] = srcsrc;
 
-          FUNCTION_COMPOSITION.val = srcsrc;
-          $L('+++++++++++++++++++++++++++++++++++++++++++++++++++FUNCTION_COMPOSITION.val');
-          $L(FUNCTION_COMPOSITION.val);
+          push(FUNCTION_COMPOSITION, srcsrc);
 
           for (var i = 0; i < atr.length; i++)
           {
-            push(VAL[i].wrapped_value, atr[i]);
+            push(VAL(i)
+              .wrapped_value, atr[i]);
           }
 
           // f = _f[0][1][0];
@@ -282,13 +269,12 @@ var $mapMEMORY = function(src)
 
 var $mapEACH = function(src, atr)
 {
-  $L('---invoke ');
+  $L('---$mapEACH ');
   $L(src);
   for (var i = 0; i < src.length; i++)
   {
     $mapMEMORY(src[i]);
-  }
-
+  }　
   return true;
 };
 
@@ -1039,9 +1025,9 @@ if (typeof describe !== "undefined")
               var myF1 =
                     [
                           FUNCTION_COMPOSITION,
-                          [plus, VAL[0]],
-                          [plus, VAL[1]],
-                          [plus, VAL[2]]
+                          [plus, VAL(0)],
+                          [plus, VAL(1)],
+                          [plus, VAL(2)]
                     ];
 
               var code =
