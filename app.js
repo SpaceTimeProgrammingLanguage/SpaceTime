@@ -24,18 +24,6 @@ var $L = function(msg)
   }
 };
 
-var push = function(arr, data)
-{
-  arr[arr.length] = data;
-};
-
-var pop = function(arr)
-{
-  var data = arr[arr.length - 1];
-  arr.splice(arr.length - 1, 1);
-  return data;
-};
-
 
 
 var MEMORY = 'MEMORY';
@@ -55,6 +43,19 @@ var VAL = function(index)
     wrapped_value: []
   });
 };
+
+var $push = function(arr, data)
+{
+  arr[arr.length] = data;
+};
+
+var $pop = function(arr)
+{
+  var data = arr[arr.length - 1];
+  arr.splice(arr.length - 1, 1);
+  return data;
+};
+
 
 
 //see http://bonsaiden.github.io/JavaScript-Garden/#types.typeof
@@ -178,7 +179,7 @@ var $mapMEMORY = function(src)
     else if ((src.length === 1) && (src[0] === FUNCTION_COMPOSITION))
     {
       $L('!!!!!!!!!!!!!!=====================src === [FUNCTION_COMPOSITION]!!!!!!!!!!!!!!');
-      return $mapMEMORY(pop(FUNCTION_COMPOSITION));
+      return $mapMEMORY($pop(FUNCTION_COMPOSITION));
     }
     else
     {
@@ -226,11 +227,11 @@ var $mapMEMORY = function(src)
 
           // [FUNCTION_COMPOSITION] = srcsrc;
 
-          push(FUNCTION_COMPOSITION, srcsrc);
+          $push(FUNCTION_COMPOSITION, srcsrc);
 
           for (var i = 0; i < atr.length; i++)
           {
-            push(VAL(i)
+            $push(VAL(i)
               .wrapped_value, atr[i]);
           }
 
@@ -256,7 +257,7 @@ var $mapMEMORY = function(src)
 
     if (src.hasOwnProperty('wrapped_value'))
     {
-      return pop(src.wrapped_value);
+      return $pop(src.wrapped_value);
     }
     else
     {
