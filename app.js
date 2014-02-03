@@ -1030,7 +1030,7 @@ if (typeof describe !== "undefined")
   describe('===================================================================================',
     function()
     {
-      describe(' Function ',
+      describe('Function Composition',
         function()
         {
           it('to write ',
