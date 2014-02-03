@@ -46,7 +46,7 @@ var NONE = 'NONE';
 var FUNCTION_SEQUENCE = 'FUNCTION_SEQUENCE';
 var DATA_SEQUENCE = 'DATA_SEQUENCE';
 
-var FIRST_SEQUENCE = {
+var FUNCTION_COMPOSITION = {
   val: null
 };
 
@@ -121,7 +121,7 @@ var isType = function(src, atr)
     {
       if (el[0].length > 1)
       {
-        if (el[0][0] === FIRST_SEQUENCE)
+        if (el[0][0] === FUNCTION_COMPOSITION)
         {
           return true;
         }
@@ -205,11 +205,11 @@ var $mapMEMORY = function(src)
     {
       return [];
     }
-    else if ((src.length === 1) && (src[0] === FIRST_SEQUENCE))
+    else if ((src.length === 1) && (src[0] === FUNCTION_COMPOSITION))
     {
-      $L('!!!!!!!!!!!!!!=====================src === [FIRST_SEQUENCE]!!!!!!!!!!!!!!');
-      $L(FIRST_SEQUENCE.val);
-      return $mapMEMORY(FIRST_SEQUENCE.val);
+      $L('!!!!!!!!!!!!!!=====================src === [FUNCTION_COMPOSITION]!!!!!!!!!!!!!!');
+      $L(FUNCTION_COMPOSITION.val);
+      return $mapMEMORY(FUNCTION_COMPOSITION.val);
     }
     else
     {
@@ -250,16 +250,16 @@ var $mapMEMORY = function(src)
           $L(result);
           return result;
         }
-        else // _f = [FIRST_SEQUENCE,[plus, [1]],[plus, [2]]]
+        else // _f = [FUNCTION_COMPOSITION,[plus, [1]],[plus, [2]]]
         {
           $L('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Custom Function &&&&&');
           $L(_f);
 
-          // [FIRST_SEQUENCE] = srcsrc;
+          // [FUNCTION_COMPOSITION] = srcsrc;
 
-          FIRST_SEQUENCE.val = srcsrc;
-          $L('+++++++++++++++++++++++++++++++++++++++++++++++++++FIRST_SEQUENCE.val');
-          $L(FIRST_SEQUENCE.val);
+          FUNCTION_COMPOSITION.val = srcsrc;
+          $L('+++++++++++++++++++++++++++++++++++++++++++++++++++FUNCTION_COMPOSITION.val');
+          $L(FUNCTION_COMPOSITION.val);
 
           for (var i = 0; i < atr.length; i++)
           {
@@ -1038,7 +1038,7 @@ if (typeof describe !== "undefined")
             {
               var myF1 =
                     [
-                          FIRST_SEQUENCE,
+                          FUNCTION_COMPOSITION,
                           [plus, VAL[0]],
                           [plus, VAL[1]],
                           [plus, VAL[2]]
