@@ -3,15 +3,40 @@
 
 'use strict';
 
+var debug = false;
+
+
 var $wt = function(msg)
 {
   console.log(msg);
 };
 
-var $log = function(msg)
+var $L = function(msg)
 {
-  console.log(msg);
+  if (debug)
+  {
+    var util = require('util');
+    console.log(util.inspect(msg,
+    {
+      depth: 99,
+      colors: true
+    }));
+  }
 };
+
+var push = function(arr, data)
+{
+  arr[arr.length] = data;
+};
+
+var pop = function(arr)
+{
+  var data = arr[arr.length - 1];
+  arr.splice(arr.length - 1, 1);
+  return data;
+};
+
+
 
 var MEMORY = 'MEMORY';
 var EACH = 'EACH';
@@ -33,9 +58,15 @@ var VAL = [];
 
 for (var i = 0; i < 100; i++)
 {
-  VAL[i] = {};
+  VAL[i] = {
+    wrapped_value: []
+  };
 }
 
+var getObjectAtIndex = function(arr, index)
+{
+  return arr[index] || (arr[index] = {});
+};
 
 //see http://bonsaiden.github.io/JavaScript-Garden/#types.typeof
 var $type = function(obj)
@@ -137,18 +168,18 @@ var $content = function(seq)
 
 var $mapNONE = function(src)
 {
-  $log('!!!!!!!!!!!NONE');
+  $L('!!!!!!!!!!!NONE');
   //do nothing, won't map/dig src
   return true;
 };
 
 var $mapCONSOLE = function(src)
 {
-  $log(' ---$mapCONSOLE  fn ----- ');
+  $L(' ---$mapCONSOLE  fn ----- ');
 
   var result = $mapMEMORY(src);
 
-  $log('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
+  $L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
   $wt($content(result)); //side effect
 
   return result;
@@ -156,46 +187,46 @@ var $mapCONSOLE = function(src)
 
 var $mapMEMORY = function(src)
 {
-  $log('############## mapMEM ################');
-  $log('----------- src --------------');
-
-  $log(src);
-  $log('------------------------------');
+  $L('############## mapMEM ################');
+  $L('----------- src --------------');
+  $L(src);
+  $L('------------------------------');
 
   if (isType(src, FUNCTION_SEQUENCE))
   {
-    $log('@@@@@========  FUNCTION_SEQUENCE ======= @@@@@');
-    $log(src);
+    $L('@@@@@========  FUNCTION_SEQUENCE ======= @@@@@');
+    $L(src);
     return src;
   }
   else if (isType(src, DATA_SEQUENCE))
   {
-    $log('@@@@@======== DATA_SEQUENCE =========@@@@@');
+    $L('@@@@@======== DATA_SEQUENCE =========@@@@@');
     if (src.length === 0) //empty pair
     {
       return [];
     }
     else if ((src.length === 1) && (src[0] === FIRST_SEQUENCE))
     {
-      $log('!!!!!!!!!!!!!!src === [FIRST_SEQUENCE]!!!!!!!!!!!!!!');
-      return FIRST_SEQUENCE.val;
+      $L('!!!!!!!!!!!!!!=====================src === [FIRST_SEQUENCE]!!!!!!!!!!!!!!');
+      $L(FIRST_SEQUENCE.val);
+      return $mapMEMORY(FIRST_SEQUENCE.val);
     }
     else
     {
-      $log('----------------------------------');
+      $L('----------------------------------');
       var lastElement = src[src.length - 1];
-      $log('!!!!!!!!!!!!!!lastElement');
-      $log(lastElement);
+      $L('!!!!!!!!!!!!!!lastElement');
+      $L(lastElement);
 
       if (!isType(lastElement, FUNCTION_SEQUENCE))
       {
-        $log('@@@@@ unOperatable DATA_SEQUENCE @@@@@');
-        $log(src);
+        $L('@@@@@ unOperatable DATA_SEQUENCE @@@@@');
+        $L(src);
         return src;
       }
       else
       {
-        $log('@@@@@ Operatable DATA_SEQUENCE @@@@@');
+        $L('@@@@@ Operatable DATA_SEQUENCE (the lastElement== f)@@@@@');
         // src = [SRC, [plus, ATR]]
         var _f = lastElement[0];
         var atr = lastElement[1];
@@ -210,26 +241,29 @@ var $mapMEMORY = function(src)
           f = _f;
           if (!isType(srcsrc, DATA_SEQUENCE))
             throw 'Invalid Format';
-          //$log('---srcsrc--------');
-          //$log(srcsrc);  [SRC]
+          //$L('---srcsrc--------');
+          //$L(srcsrc);  [SRC]
 
           result = f(srcsrc, atr); //plus([1],[2])
 
-          $log('---result--------');
-          $log(result);
+          $L('---result--------');
+          $L(result);
           return result;
         }
-        else // _f = [FUNCTION, [plus, VAL[0]], [plus, VAL[1]] ]
+        else // _f = [FIRST_SEQUENCE,[plus, [1]],[plus, [2]]]
         {
-          $log('&&&&& Custom Function &&&&&');
-          $log(_f);
+          $L('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Custom Function &&&&&');
+          $L(_f);
 
           // [FIRST_SEQUENCE] = srcsrc;
+
           FIRST_SEQUENCE.val = srcsrc;
+          $L('+++++++++++++++++++++++++++++++++++++++++++++++++++FIRST_SEQUENCE.val');
+          $L(FIRST_SEQUENCE.val);
 
           for (var i = 0; i < atr.length; i++)
           {
-            VAL[i].value = atr[i];
+            push(VAL[i].wrapped_value, atr[i]);
           }
 
           // f = _f[0][1][0];
@@ -237,8 +271,8 @@ var $mapMEMORY = function(src)
 
           result = $mapMEMORY(_f);
 
-          $log('---result--------');
-          $log(result);
+          $L('---result--------');
+          $L(result);
           return result;
         }
 
@@ -248,10 +282,18 @@ var $mapMEMORY = function(src)
   }
   else
   {
-    $log('@@@@@========= ATOM/OBJECT ========@@@@@');
-    $log('---result--------');
-    $log(src);
-    return src;
+    $L('@@@@@========= ATOM/OBJECT ========@@@@@');
+    $L('---result--------');
+    $L(src);
+
+    if (src.hasOwnProperty('wrapped_value'))
+    {
+      return pop(src.wrapped_value);
+    }
+    else
+    {
+      return src;
+    }
   }
 
 };
@@ -259,8 +301,8 @@ var $mapMEMORY = function(src)
 
 var $mapEACH = function(src, atr)
 {
-  $log('---invoke ');
-  $log(src);
+  $L('---invoke ');
+  $L(src);
   for (var i = 0; i < src.length; i++)
   {
     $mapMEMORY(src[i]);
@@ -273,31 +315,32 @@ var $mapEACH = function(src, atr)
 
 var plus = function(src, atr) //plus([1], [2]) = [3]
 {
-  $log('==========plus');
-  $log(src);
-  $log(atr);
+  $L('==========plus');
+  $L('---src');
+  $L(src);
+  $L('---atr');
+  $L(atr);
 
-  $wt(src);
-  $wt(atr);
+  var src1 = $mapMEMORY(src);
+  var atr1 = $mapMEMORY(atr);
 
-  if (!isType(atr, DATA_SEQUENCE))
+  $L('@@@src1');
+  $L(src1);
+  $L('@@@atr1');
+  $L(atr1);
+
+  if (!isType(atr1, DATA_SEQUENCE))
   {
 
     throw 'Invalid Format';
   }
-  else if (atr.length === 0)
+  else if (atr1.length === 0)
   {
     throw 'atr is null Sequence (empty pair), invalid format  ';
   }
   else
   {
-    var src1 = $mapMEMORY(src);
-    var atr1 = $mapMEMORY(atr);
 
-    $log('@@@src1');
-    $log(src1);
-    $log('@@@atr1');
-    $log(atr1);
 
     if (atr1.length === 1)
     {
@@ -306,7 +349,7 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
       if (!isType($content(src1), DATA_SEQUENCE))
       {
         result = $content(src1) + $content(atr1);
-        // $log(result);  
+        // $L(result);  
         return [result];
       }
       else
@@ -318,8 +361,8 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
           result[i] = src2[i] + $content(atr1);
         }
 
-        // $log('+++++++++++++++++++++++++++++');
-        //$log(result)  
+        // $L('+++++++++++++++++++++++++++++');
+        //$L(result)  
         return [result];
       }
 
@@ -351,17 +394,17 @@ var take = function(src, atr)
 
   if (isType(src1, DATA_SEQUENCE))
   {
-    $log('-----take src is Array');
-    $log('-----src1');
-    $log(src1);
-    $log('-----atr1');
-    $log(atr1);
+    $L('-----take src is Array');
+    $L('-----src1');
+    $L(src1);
+    $L('-----atr1');
+    $L(atr1);
 
     return [src1.slice(0, atr1)];
   }
   else
   {
-    $log('-----take src is Object');
+    $L('-----take src is Object');
     var i = 0;
     var out = [];
 
@@ -421,63 +464,18 @@ var bindClass = function(a)
 
 };
 
-var vals = [];
-var bind = function(src, atr)
-{
-  if (!vals[src])
-    vals[src] = bindClass(atr);
-  else
-    $log('error to bind: already exist');
-};
-
-var val = function(src, atr)
-{
-  return vals[src].val();
-};
-
-
-
-var Sharp = function()
-{
-  var Code;
-
-  var Src = {};
-  var Atr = {};
-
-  var obj = {
-    setCode: function(code)
-    {
-      Code = code;
-    },
-    src: Src,
-    atr: Atr,
-    f: function(src, atr)
-    {
-      $log('----f');
-      $log(src);
-      $log(atr);
-
-      Src._wrappedVal = src;
-      Atr._wrappedVal = atr;
-
-      return $mapMEMORY(Code);
-    }
-  };
-  return obj;
-};
-
 
 
 var ifF = function(src, atr)
 {
   //var bool = atr[0];
-  $log('!!!!!!!!!! ifF   !!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  $log(src);
-  $log($type(src) === 'Array');
+  $L('!!!!!!!!!! ifF   !!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  $L(src);
+  $L($type(src) === 'Array');
 
-  $log('!!atr!!');
-  $log(atr[0]); // [true]
-  //$mapMEMORY( [true] )
+  $L('!!atr!!');
+  $L(atr[0]); // [true]
+
 
   if ($content($mapMEMORY(atr[0])))
   {
@@ -490,34 +488,26 @@ var ifF = function(src, atr)
 
 };
 
+//=========================================
 
 
-var myF1 =
-[
-      FIRST_SEQUENCE,
-      [plus, [1]],
-      [plus, [2]]
-];
 
-var code =
-[
-     99,
-     [plus, [1]],
-     [map, [CONSOLE]]
-];
+/*
+var array = [];
+$L(array.length);
 
-//$mapMEMORY(code);
-$wt('============!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!=================');
-var code =
-[
-     5,
-     [myF1, []],
-     [map, [CONSOLE]]
-];
+push(array, 'foo');
+$L(array.length);
 
-$mapMEMORY(code);
+push(array, 'bar');
+$L(array.length);
 
+$L(pop(array));
+$L(array.length);
 
+$L(pop(array));
+$L(array.length);
+*/
 
 //################ TEST #####################
 
@@ -1051,7 +1041,50 @@ if (typeof describe !== "undefined")
                 .to.eql([0]);
             });
         });
-      //------------------------------------------------------
+
     });
 
+  describe('===================================================================================',
+    function()
+    {
+      describe(' Function ',
+        function()
+        {
+          it('to write ',
+            function()
+            {
+              var myF1 =
+                    [
+                          FIRST_SEQUENCE,
+                          [plus, VAL[0]],
+                          [plus, VAL[1]],
+                          [plus, VAL[2]]
+                    ];
+
+              var code =
+                    [
+                         1,
+                         [myF1, [[2], [3], [4]]],
+                         [myF1, [[7], [1], [2]]],
+                         [map, [CONSOLE]]
+                    ];
+
+              expect($mapMEMORY(code))
+                .to.eql([20]);
+            });
+        });
+
+    });
+
+  var samplecode =
+[
+     99,
+     [plus, [1]],
+     [map, [CONSOLE]]
+];
+
+
+
+  //------------------------------------------------------
+  //------------------------------------------------------
 }
