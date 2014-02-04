@@ -3,7 +3,7 @@
 
 'use strict';
 
-var debug = false;
+var debug = true;
 
 var $wt = function(msg)
 {
@@ -29,7 +29,6 @@ var G = {};
 var MEMORY = G.MEMORY = 'MEMORY';
 var EACH = G.EACH = 'EACH';
 var CONSOLE = G.CONSOLE = 'CONSOLE';
-var NONE = G.NONE = 'NONE';
 
 var FUNCTION_SEQUENCE = G.FUNCTION_SEQUENCE = 'FUNCTION_SEQUENCE';
 var DATA_SEQUENCE = G.DATA_SEQUENCE = 'DATA_SEQUENCE';
@@ -84,10 +83,6 @@ var map = G.map = function(src, atr)
   if (atr1 === CONSOLE)
   {
     return $mapCONSOLE(src);
-  }
-  if (atr1 === NONE)
-  {
-    return $mapNONE(src);
   }
 
 };
@@ -292,13 +287,6 @@ var $mapCONSOLE = function(src)
   return result;
 };
 
-var $mapNONE = function(src)
-{
-  $L('!!!!!!!!!!!NONE');
-  //do nothing, won't map/dig src
-  return true;
-};
-
 
 var plus = G.plus = function(src, atr) //plus([1], [2]) = [3]
 {
@@ -474,6 +462,11 @@ var ifF = G.ifF = function(src, atr)
 
 };
 
+
+var doNothing = G.doNothing = function(src, atr)
+{
+  return [];
+};
 //=========================================
 
 
@@ -1052,6 +1045,28 @@ if (typeof describe !== "undefined")
      [map, [CONSOLE]]
 ];
 
+
+  describe('===================================================================================',
+    function()
+    {
+      describe(' doNothing does nothing else but return ()',
+        function()
+        {
+          it('( AnySequence (doNothing ()) ) = () ',
+            function()
+            {
+              var code = [
+                              0,
+                              [ifF, [[false], [1]]],
+                              [ifF, [[true], [2]]], // won't be evaluated
+                              [doNothing, []]
+                          ];
+
+              expect($mapMEMORY(code))
+                .to.eql([]);
+            });
+        });
+    });
 
   //------------------------------------------------------
   //------------------------------------------------------
