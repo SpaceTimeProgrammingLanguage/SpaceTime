@@ -3,8 +3,7 @@
 
 'use strict';
 
-var debug = true;
-
+var debug = false;
 
 var $wt = function(msg)
 {
@@ -25,19 +24,20 @@ var $L = function(msg)
 };
 
 
+var G = {};
 
-var MEMORY = 'MEMORY';
-var EACH = 'EACH';
-var CONSOLE = 'CONSOLE';
-var NONE = 'NONE';
+var MEMORY = G.MEMORY = 'MEMORY';
+var EACH = G.EACH = 'EACH';
+var CONSOLE = G.CONSOLE = 'CONSOLE';
+var NONE = G.NONE = 'NONE';
 
-var FUNCTION_SEQUENCE = 'FUNCTION_SEQUENCE';
-var DATA_SEQUENCE = 'DATA_SEQUENCE';
+var FUNCTION_SEQUENCE = G.FUNCTION_SEQUENCE = 'FUNCTION_SEQUENCE';
+var DATA_SEQUENCE = G.DATA_SEQUENCE = 'DATA_SEQUENCE';
 
-var FUNCTION_COMPOSITION = [];
+var FUNCTION_COMPOSITION = G.FUNCTION_COMPOSITION = [];
 
 var Val = [];
-var VAL = function(index)
+var VAL = G.VAL = function(index)
 {
   return Val[index] || (Val[index] = {
     wrapped_value: []
@@ -69,7 +69,7 @@ var $type = function(obj)
 };
 
 
-var map = function(src, atr)
+var map = G.map = function(src, atr)
 {
   var atr1 = atr[0];
 
@@ -93,7 +93,7 @@ var map = function(src, atr)
 };
 
 
-var isType = function(src, atr)
+var isType = G.isType = function(src, atr)
 {
   var clas;
 
@@ -143,7 +143,7 @@ var isType = function(src, atr)
 
 };
 
-var isNatveFunction = function(f)
+var isNatveFunction = G.isNatveFunction = function(f)
 {
   return ($type(f) === 'Function');
 };
@@ -300,7 +300,7 @@ var $mapNONE = function(src)
 };
 
 
-var plus = function(src, atr) //plus([1], [2]) = [3]
+var plus = G.plus = function(src, atr) //plus([1], [2]) = [3]
 {
   $L('==========plus');
   $L('---src');
@@ -365,7 +365,7 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
 
 };
 
-var minus = function(src, atr)
+var minus = G.minus = function(src, atr)
 {
   var result = src - atr;
 
@@ -374,7 +374,7 @@ var minus = function(src, atr)
 
 
 
-var take = function(src, atr)
+var take = G.take = function(src, atr)
 {
   var src1 = $content($mapMEMORY(src));
   var atr1 = $content($mapMEMORY(atr));
@@ -411,14 +411,14 @@ var take = function(src, atr)
 
 var Seq = [];
 
-var NATURAL = {
+var NATURAL = G.NATURAL = {
   f: function(i)
   {
     return i;
   }
 };
 
-var FIB = {
+var FIB = G.FIB = {
   f: function(i)
   {
     if (i <= 1)
@@ -452,8 +452,7 @@ var bindClass = function(a)
 };
 
 
-
-var ifF = function(src, atr)
+var ifF = G.ifF = function(src, atr)
 {
   //var bool = atr[0];
   $L('!!!!!!!!!! ifF   !!!!!!!!!!!!!!!!!!!!!!!!!!!');
@@ -1052,7 +1051,6 @@ if (typeof describe !== "undefined")
      [plus, [1]],
      [map, [CONSOLE]]
 ];
-
 
 
   //------------------------------------------------------
