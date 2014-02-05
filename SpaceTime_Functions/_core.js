@@ -46,6 +46,7 @@ var VAL = M.VAL = function(index)
 	});
 };
 
+//is Type Function is foundamental and used in $mapMEMORY, so cannot be exported
 var isType = M.isType = function(src, atr)
 {
 	var clas;
