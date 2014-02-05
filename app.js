@@ -8,20 +8,42 @@ var SpaceTime_coreFile = '_core.js';
 
 var M = require(SpaceTime_FunctionsDIR + SpaceTime_coreFile);
 
-require("fs")
-  .readdirSync(SpaceTime_FunctionsDIR)
-  .forEach(function(file)
+var loadModules = M.loadModules = function(f)
+{
+  console.log('SpaceTime modlue loading...');
+
+  require("fs")
+    .readdir(SpaceTime_FunctionsDIR,
+      function(err, files)
+      {
+        files.forEach(function(file)
+        {
+          if (file !== SpaceTime_coreFile)
+          {
+            var name = file.split('.js')[0];
+            var filepath = SpaceTime_FunctionsDIR + file;
+            M[name] = require(filepath);
+            console.log('Function: ' + name);
+          }
+        });
+        console.log('SpaceTime modlue load complete.');
+        f();
+      });
+};
+
+if (typeof describe === 'undefined')
+{
+  loadModules(function()
   {
-    if (file !== SpaceTime_coreFile)
-    {
-      var name = file.split('.js')[0];
-
-      var filepath = SpaceTime_FunctionsDIR + file;
-      M[name] = require(filepath);
-
-      M.$W('Function: ' + name);
-    }
+    init();
   });
+}
 
 module.exports = M;
 //=========================================
+
+
+var init = function()
+{
+  M.$W('#################### ready !!#####################');
+};

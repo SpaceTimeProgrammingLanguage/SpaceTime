@@ -7,8 +7,21 @@ var expect = require('chai')
     .expect;
 
 var M = require('./app.js');
-M.$W('#################### SpaceTime TEST #####################');
-M.$W('{src f}   src -f-> ??');
+
+describe('########################### SpaceTime TEST ############################',
+    function()
+    {
+        it('loading core & other modules',
+            function(done)
+            {
+                M.loadModules(
+                    function()
+                    {
+                        done();
+                    });
+            });
+    });
+
 
 describe('===================================================================================',
     function()
@@ -127,10 +140,11 @@ describe('======================================================================
                 it('("hello world" (map (CONSOLE))) = ("hello world")',
                     function()
                     {
-                        var code = [
-                              "hello world",
-                              [M.map, [M.CONSOLE]]
-                         ];
+                        var code =
+                                 [
+                                      "hello world",
+                                      [M.map, [M.CONSOLE]]
+                                 ];
 
                         expect(M.$mapMEMORY(code))
                             .to.eql(["hello world"]);
@@ -147,11 +161,12 @@ describe('======================================================================
                 it('("hello world"  (map (CONSOLE))  (map (CONSOLE))) = ("hello world")',
                     function()
                     {
-                        var code = [
-                              "hello world",
-                              [M.map, [M.CONSOLE]],
-                              [M.map, [M.CONSOLE]]
-                         ];
+                        var code =
+                                     [
+                                          "hello world",
+                                          [M.map, [M.CONSOLE]],
+                                          [M.map, [M.CONSOLE]]
+                                     ];
 
                         expect(M.$mapMEMORY(code))
                             .to.eql(["hello world"]);
@@ -567,11 +582,11 @@ describe('======================================================================
     });
 
 var samplecode =
-[
-     99,
-     [M.plus, [1]],
-     [M.map, [M.CONSOLE]]
-];
+                        [
+                             99,
+                             [M.plus, [1]],
+                             [M.map, [M.CONSOLE]]
+                        ];
 
 
 describe('===================================================================================',
@@ -596,3 +611,7 @@ describe('======================================================================
                     });
             });
     });
+
+
+//------------------------------------
+M.$W('{src f}   src -f-> ??');
