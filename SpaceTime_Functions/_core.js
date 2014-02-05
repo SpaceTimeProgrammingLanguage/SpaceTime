@@ -46,6 +46,25 @@ var VAL = M.VAL = function(index)
 	});
 };
 
+
+
+//see http://bonsaiden.github.io/JavaScript-Garden/#types.typeof
+var $type = M.$type = function(obj)
+{
+	return Object
+		.prototype
+		.toString
+		.call(obj)
+		.slice(8, -1);
+};
+
+
+var isNatveFunction = M.isNatveFunction = function(el)
+{
+	return ($type(el) === 'Function');
+};
+
+
 //is Type Function is foundamental and used in $mapMEMORY, so cannot be exported
 var isType = M.isType = function(src, atr)
 {
@@ -57,7 +76,7 @@ var isType = M.isType = function(src, atr)
 		{
 			return false;
 		}
-		else if ($type(el[0]) === 'Function')
+		else if (isNatveFunction(el[0]))
 		{
 			return true;
 		}
@@ -97,12 +116,6 @@ var isType = M.isType = function(src, atr)
 
 };
 
-var isNatveFunction = M.isNatveFunction = function(f)
-{
-	return ($type(f) === 'Function');
-};
-
-
 
 var $push = M.$push = function(arr, data)
 {
@@ -117,16 +130,6 @@ var $pop = M.$pop = function(arr)
 };
 
 
-
-//see http://bonsaiden.github.io/JavaScript-Garden/#types.typeof
-var $type = M.$type = function(obj)
-{
-	return Object
-		.prototype
-		.toString
-		.call(obj)
-		.slice(8, -1);
-};
 
 var $content = M.$content = function(seq)
 {
