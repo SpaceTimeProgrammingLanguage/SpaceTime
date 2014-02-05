@@ -8,7 +8,6 @@ var expect = require('chai')
 
 var M = require('./app.js');
 
-
 describe('=============================== SpaceTime TEST =====================================',
     function()
     {
