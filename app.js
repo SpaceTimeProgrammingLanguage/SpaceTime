@@ -5,13 +5,15 @@
 
 var SpaceTime_FunctionsDIR = './SpaceTime_Functions/';
 var SpaceTime_coreFile = '_core.js';
-
+console.log('{src f}   src -f-> ??');
+console.log('');
+console.log('SpaceTime modlue loading...');
 var M = require(SpaceTime_FunctionsDIR + SpaceTime_coreFile);
+module.exports = M;
+console.log('core module');
 
 var loadModules = M.loadModules = function(f)
 {
-  console.log('SpaceTime modlue loading...');
-
   require("fs")
     .readdir(SpaceTime_FunctionsDIR,
       function(err, files)
@@ -39,7 +41,6 @@ if (typeof describe === 'undefined')
   });
 }
 
-module.exports = M;
 //=========================================
 
 
