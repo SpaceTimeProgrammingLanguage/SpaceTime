@@ -9,15 +9,22 @@ console.log('{src f}   src -f-> ??');
 console.log('');
 console.log('SpaceTime modlue loading...');
 //var M = require(SpaceTime_FunctionsDIR + SpaceTime_coreFile);
+//require(STRING) must be raw STRING to be read by Browserify
 var M = require('./SpaceTime_Functions/_core.js');
 module.exports = M;
 console.log('core module');
 
 var loadModulesFactory;
 
-//=======Comment/Out for node or browserify
-loadModulesFactory = require('./loadModulesFactory');
-//loadModulesFactory = require('./loadModulesFactoryBrowserify');
+if (typeof window === 'undefined')
+{
+  var modulePathHiddenFromBrowserify = './loadModulesFactory';
+  loadModulesFactory = require(modulePathHiddenFromBrowserify);
+}
+else
+{
+  loadModulesFactory = require('./loadModulesFactoryBrowserify');
+}
 
 var obj = loadModulesFactory(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M);
 M = obj.M;
