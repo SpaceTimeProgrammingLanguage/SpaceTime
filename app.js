@@ -3,36 +3,16 @@
 
 'use strict';
 
-var debug = false;
-
-var $W = function(msg)
-{
-  console.log(msg);
-};
-
-var $L = function(msg)
-{
-  if (debug)
-  {
-    var util = require('util');
-    console.log(util.inspect(msg,
-    {
-      depth: 99,
-      colors: true
-    }));
-  }
-};
-
 var SpaceTime_FunctionsDIR = './SpaceTime_Functions/';
-var SpaceTime_CoreFunctionFile = '_core.js';
+var SpaceTime_MFunctionFile = '_core.js';
 
-var M = require(SpaceTime_FunctionsDIR + SpaceTime_CoreFunctionFile);
+var M = require(SpaceTime_FunctionsDIR + SpaceTime_MFunctionFile);
 
 require("fs")
   .readdirSync(SpaceTime_FunctionsDIR)
   .forEach(function(file)
   {
-    if (file !== SpaceTime_CoreFunctionFile)
+    if (file !== SpaceTime_MFunctionFile)
     {
       var name = file.split('.js')[0];
 
@@ -40,7 +20,7 @@ require("fs")
       M[name] = require(filepath);
 
 
-      $W('Function: ' + name);
+      M.$W('Function: ' + name);
     }
   });
 
@@ -54,8 +34,8 @@ if (typeof describe !== "undefined")
   var expect = require('chai')
     .expect;
 
-  $W('#################### SpaceTime TEST #####################');
-  $W('{src f}   src -f-> ??');
+  M.$W('#################### SpaceTime TEST #####################');
+  M.$W('{src f}   src -f-> ??');
 
 
   describe('===================================================================================',

@@ -3,26 +3,26 @@
 
 'use strict';
 
-var core = require('./_core');
+var M = require('./_core');
 
 var take = function(src, atr)
 {
-	var src1 = core.$content(core.$mapMEMORY(src));
-	var atr1 = core.$content(core.$mapMEMORY(atr));
+	var src1 = M.$content(M.$mapMEMORY(src));
+	var atr1 = M.$content(M.$mapMEMORY(atr));
 
-	if (core.isType(src1, core.DATA_SEQUENCE))
+	if (M.isType(src1, M.DATA_SEQUENCE))
 	{
-		core.$L('-----take src is Array');
-		core.$L('-----src1');
-		core.$L(src1);
-		core.$L('-----atr1');
-		core.$L(atr1);
+		M.$L('-----take src is Array');
+		M.$L('-----src1');
+		M.$L(src1);
+		M.$L('-----atr1');
+		M.$L(atr1);
 
 		return [src1.slice(0, atr1)];
 	}
 	else
 	{
-		core.$L('-----take src is Object');
+		M.$L('-----take src is Object');
 		var i = 0;
 		var out = [];
 

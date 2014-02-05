@@ -3,26 +3,26 @@
 
 'use strict';
 
-var core = require('./_core');
+var M = require('./_core');
 
 var ifF = function(src, atr)
 {
   //var bool = atr[0];
-  core.$L('!!!!!!!!!! ifF   !!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  core.$L(src);
-  core.$L(core.$type(src) === 'Array');
+  M.$L('!!!!!!!!!! ifF   !!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  M.$L(src);
+  M.$L(M.$type(src) === 'Array');
 
-  core.$L('!!atr!!');
-  core.$L(atr[0]); // [true]
+  M.$L('!!atr!!');
+  M.$L(atr[0]); // [true]
 
 
-  if (core.$content(core.$mapMEMORY(atr[0])))
+  if (M.$content(M.$mapMEMORY(atr[0])))
   {
-    return core.$mapMEMORY(atr[1]);
+    return M.$mapMEMORY(atr[1]);
   }
   else
   {
-    return core.$mapMEMORY(src);
+    return M.$mapMEMORY(src);
   }
 
 };
