@@ -718,7 +718,7 @@ module.exports = NATURAL;
 
 'use strict';
 
-var debug = true;
+var debug = false;
 
 var M = {};
 module.exports = M;
@@ -1229,16 +1229,13 @@ var M = require('./SpaceTime_Functions/_core.js');
 module.exports = M;
 console.log('core module');
 
-
 var loadModulesFactory;
 
+//=======Comment/Out for node or browserify
 //loadModulesFactory = require('./loadModulesFactory');
-
-loadModulesFactory = require('./loadModulesFactoryBrowser');
-
+loadModulesFactory = require('./loadModulesFactoryBrowserify');
 
 var obj = loadModulesFactory(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M);
-
 M = obj.M;
 var loadModules = M.loadModules = obj.func;
 
@@ -1272,7 +1269,7 @@ if (typeof describe === 'undefined')
 }
 
 //=========================================
-},{"./SpaceTime_Functions/_core.js":7,"./loadModulesFactoryBrowser":15}],15:[function(require,module,exports){
+},{"./SpaceTime_Functions/_core.js":7,"./loadModulesFactoryBrowserify":15}],15:[function(require,module,exports){
 var loadModulesFactory = function(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M)
 {
   return {

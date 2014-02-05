@@ -17,7 +17,7 @@ var loadModulesFactory;
 
 //=======Comment/Out for node or browserify
 loadModulesFactory = require('./loadModulesFactory');
-//loadModulesFactory = require('./loadModulesFactoryBrowser');
+//loadModulesFactory = require('./loadModulesFactoryBrowserify');
 
 var obj = loadModulesFactory(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M);
 M = obj.M;
