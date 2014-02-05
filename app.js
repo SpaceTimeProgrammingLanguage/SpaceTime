@@ -8,47 +8,28 @@ var SpaceTime_coreFile = '_core.js';
 console.log('{src f}   src -f-> ??');
 console.log('');
 console.log('SpaceTime modlue loading...');
-var M = require(SpaceTime_FunctionsDIR + SpaceTime_coreFile);
+//var M = require(SpaceTime_FunctionsDIR + SpaceTime_coreFile);
+var M = require('./SpaceTime_Functions/_core.js');
 module.exports = M;
 console.log('core module');
 
-var loadModules = M.loadModules = function(f)
-{
-  require("fs")
-    .readdir(SpaceTime_FunctionsDIR,
-      function(err, files)
-      {
-        files.forEach(function(file)
-        {
-          if (file !== SpaceTime_coreFile)
-          {
-            var name = file.split('.js')[0];
-            var filepath = SpaceTime_FunctionsDIR + file;
-            M[name] = require(filepath);
-            console.log('Function: ' + name);
-          }
-        });
-        console.log('SpaceTime modlue load complete.');
-        f();
-      });
-};
+var loadModulesFactory;
+
+//=======Comment/Out for node or browserify
+loadModulesFactory = require('./loadModulesFactory');
+//loadModulesFactory = require('./loadModulesFactoryBrowser');
+
+var obj = loadModulesFactory(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M);
+M = obj.M;
+var loadModules = M.loadModules = obj.func;
 
 if (typeof describe === 'undefined')
 {
   loadModules(function()
   {
-    init();
-  });
-}
+    M.$W('------------- SpaceTime ready ----------------');
 
-//=========================================
-
-
-var init = function()
-{
-  M.$W('------------- SpaceTime ready ----------------');
-
-  var myF1 =
+    var myF1 =
             [
                   M.FUNCTION_COMPOSITION,
                   [M.plus, M.VAL(0)],
@@ -56,7 +37,7 @@ var init = function()
                   [M.plus, M.VAL(2)]
             ];
 
-  var code =
+    var code =
             [
                   1,
                  [myF1, [[2], [3], [4]]],
@@ -64,5 +45,11 @@ var init = function()
                  [M.map, [M.CONSOLE]]
             ];
 
-  M.$mapMEMORY(code);
-};
+    M.$mapMEMORY(code);
+
+
+    //------------------------------------------------------------------
+  });
+}
+
+//=========================================

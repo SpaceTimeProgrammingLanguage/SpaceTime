@@ -18,12 +18,19 @@ var $L = M.$L = function(msg)
 {
 	if (debug)
 	{
-		var util = require('util');
-		console.log(util.inspect(msg,
+		if (typeof window === 'undefined')
 		{
-			depth: 99,
-			colors: true
-		}));
+			var util = require('util');
+			console.log(util.inspect(msg,
+			{
+				depth: 99,
+				colors: true
+			}));
+		}
+		else
+		{
+			console.log(msg);
+		}
 	}
 };
 
