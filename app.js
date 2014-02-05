@@ -47,4 +47,22 @@ if (typeof describe === 'undefined')
 var init = function()
 {
   M.$W('#################### ready !!#####################');
+
+  var myF1 =
+            [
+                  M.FUNCTION_COMPOSITION,
+                  [M.plus, M.VAL(0)],
+                  [M.plus, M.VAL(1)],
+                  [M.plus, M.VAL(2)]
+            ];
+
+  var code =
+            [
+                 1,
+                 [myF1, [[2], [3], [4]]],
+                 [myF1, [[7], [1], [2]]],
+                 [M.map, [M.CONSOLE]]
+            ];
+
+  M.$mapMEMORY(code);
 };
