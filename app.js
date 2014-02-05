@@ -58,7 +58,7 @@ var init = function()
 
   var code =
             [
-                 1,
+                  1,
                  [myF1, [[2], [3], [4]]],
                  [myF1, [[7], [1], [2]]],
                  [M.map, [M.CONSOLE]]
