@@ -179,17 +179,14 @@ var $mapMEMORY = M.$mapMEMORY = function(src)
 			{
 				$L('@@@@@ Operatable DATA_SEQUENCE (the lastElement== f)@@@@@');
 				// src = [SRC, [plus, ATR]]
-				var _f = lastElement[0];
+				var f = lastElement[0];
 				var atr = lastElement[1];
 
 				var srcsrc = src.slice(0, src.length - 1);
 
-				var f;
-
 				var result;
-				if (isNatveFunction(_f)) // _f = plus
+				if (isNatveFunction(f)) // _f = plus
 				{
-					f = _f;
 					if (!isType(srcsrc, DATA_SEQUENCE))
 						throw 'Invalid Format';
 					//$L('---srcsrc--------');
@@ -204,7 +201,7 @@ var $mapMEMORY = M.$mapMEMORY = function(src)
 				else // _f = [FUNCTION_COMPOSITION,[plus, [1]],[plus, [2]]]
 				{
 					$L('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Custom Function &&&&&');
-					$L(_f);
+					$L(f);
 
 					// [FUNCTION_COMPOSITION] = srcsrc;
 
@@ -219,7 +216,7 @@ var $mapMEMORY = M.$mapMEMORY = function(src)
 					// f = _f[0][1][0];
 					// result = f(srcsrc, atr); //plus([1],[2])
 
-					result = $mapMEMORY(_f);
+					result = $mapMEMORY(f);
 
 					$L('---result--------');
 					$L(result);
