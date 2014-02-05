@@ -5,7 +5,7 @@
 
 var M = require('./_core');
 
-var map = M.map = function(src, atr)
+var map = function(src, atr)
 {
 	var atr1 = atr[0];
 

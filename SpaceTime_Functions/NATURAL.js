@@ -3,9 +3,11 @@
 
 'use strict';
 
-var doNothing = function(src, atr)
-{
-	return [];
+var NATURAL = {
+	f: function(i)
+	{
+		return i;
+	}
 };
 
-module.exports = doNothing;
+module.exports = NATURAL;

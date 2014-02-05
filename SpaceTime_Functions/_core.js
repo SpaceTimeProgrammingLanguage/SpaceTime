@@ -277,33 +277,6 @@ var $mapCONSOLE = M.$mapCONSOLE = function(src)
 
 
 
-var Seq = [];
-
-var NATURAL = M.NATURAL = {
-	f: function(i)
-	{
-		return i;
-	}
-};
-
-var FIB = M.FIB = {
-	f: function(i)
-	{
-		if (i <= 1)
-		{
-			Seq[i] = 1;
-		}
-		else
-		{
-			Seq[i] = Seq[i - 2] + Seq[i - 1];
-		}
-
-		return Seq[i];
-	}
-};
-
-
-
 var bindClass = function(a)
 {
 	var x = a;
