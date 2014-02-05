@@ -46,7 +46,7 @@ if (typeof describe === 'undefined')
 
 var init = function()
 {
-  M.$W('#################### ready !!#####################');
+  M.$W('------------- SpaceTime ready ----------------');
 
   var myF1 =
             [
