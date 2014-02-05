@@ -3,7 +3,7 @@
 
 'use strict';
 
-var debug = false;
+var debug = true;
 
 var M = {};
 module.exports = M;
