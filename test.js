@@ -6,11 +6,9 @@
 var expect = require('chai')
 	.expect;
 
-
 var M = require('./app.js');
 M.$W('#################### SpaceTime TEST #####################');
 M.$W('{src f}   src -f-> ??');
-
 
 describe('===================================================================================',
 	function()
