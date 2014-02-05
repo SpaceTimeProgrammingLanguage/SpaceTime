@@ -46,28 +46,6 @@ var VAL = M.VAL = function(index)
 	});
 };
 
-
-
-var map = M.map = function(src, atr)
-{
-	var atr1 = atr[0];
-
-	if (atr1 === MEMORY)
-	{
-		return $mapMEMORY(src);
-	}
-	if (atr1 === EACH)
-	{
-		return $mapMEMORY(src);
-	}
-	if (atr1 === CONSOLE)
-	{
-		return $mapCONSOLE(src);
-	}
-
-};
-
-
 var isType = M.isType = function(src, atr)
 {
 	var clas;
@@ -267,7 +245,7 @@ var $mapMEMORY = M.$mapMEMORY = function(src)
 };
 
 
-var $mapEACH = M.$mapEACH = function(src, atr)
+var $mapEACH = M.$mapEACH = function(src)
 {
 	$L('---$mapEACH ');
 	$L(src);
@@ -291,12 +269,7 @@ var $mapCONSOLE = M.$mapCONSOLE = function(src)
 	return result;
 };
 
-
-
-var doNothing = M.doNothing = function(src, atr)
-{
-	return [];
-};
+//======================================
 
 
 
