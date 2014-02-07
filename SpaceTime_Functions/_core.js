@@ -34,8 +34,6 @@ var $L = M.$L = function(msg)
 	}
 };
 
-
-
 var MEMORY = M.MEMORY = 'MEMORY';
 var EACH = M.EACH = 'EACH';
 var CONSOLE = M.CONSOLE = 'CONSOLE';
@@ -72,7 +70,7 @@ var isNatveFunction = M.isNatveFunction = function(el)
 };
 
 
-//is Type Function is foundamental and used in $mapMEMORY, so cannot be exported
+//is Type Function is fundamental and used in $mapMEMORY, so cannot be exported
 var isType = M.isType = function(src, atr)
 {
 	var clas;
@@ -252,30 +250,6 @@ var $mapMEMORY = M.$mapMEMORY = function(src)
 
 };
 
-
-var $mapEACH = M.$mapEACH = function(src)
-{
-	$L('---$mapEACH ');
-	$L(src);
-	for (var i = 0; i < src.length; i++)
-	{
-		$mapMEMORY(src[i]);
-	}　
-	return true;
-};
-
-
-var $mapCONSOLE = M.$mapCONSOLE = function(src)
-{
-	$L(' ---$mapCONSOLE  fn ----- ');
-
-	var result = $mapMEMORY(src);
-
-	$L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
-	$W($content(result)); //side effect
-
-	return result;
-};
 
 //======================================
 

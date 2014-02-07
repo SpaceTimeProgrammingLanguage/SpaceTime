@@ -8,6 +8,28 @@ var M = require('./_core');
 var map = function(src, atr)
 {
 	var atr1 = atr[0];
+	var $mapEACH = function(src)
+	{
+		//$L('---$mapEACH ');
+		//$L(src);
+		for (var i = 0; i < src.length; i++)
+		{
+			M.$mapMEMORY(src[i]);
+		}　
+		return true;
+	};
+
+	var $mapCONSOLE = function(src)
+	{
+		//$L(' ---$mapCONSOLE  fn ----- ');
+
+		var result = M.$mapMEMORY(src);
+
+		M.$L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
+		M.$W(M.$content(result)); //side effect
+
+		return result;
+	};
 
 	if (atr1 === M.MEMORY)
 	{
@@ -15,11 +37,11 @@ var map = function(src, atr)
 	}
 	if (atr1 === M.EACH)
 	{
-		return M.$mapMEMORY(src);
+		return M.$mapEACH(src);
 	}
 	if (atr1 === M.CONSOLE)
 	{
-		return M.$mapCONSOLE(src);
+		return $mapCONSOLE(src);
 	}
 
 };
