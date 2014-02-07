@@ -718,12 +718,53 @@ module.exports = NATURAL;
 
 'use strict';
 
-var debug = true;
+var doNothing = function(src, atr)
+{
+	return [];
+};
+
+module.exports = doNothing;
+},{}],8:[function(require,module,exports){
+/* jslint node: true */
+/* global describe, it, before, beforeEach, after, afterEach */
+
+'use strict';
+
+var M = require('./map');
+
+var ifF = function(src, atr)
+{
+  //var bool = atr[0];
+  M.$L('!!!!!!!!!! ifF   !!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  M.$L(src);
+  M.$L(M.$type(src) === 'Array');
+
+  M.$L('!!atr!!');
+  M.$L(atr[0]); // [true]
+
+
+  if (M.$content(M.map(atr[0], [M.MEMORY])))
+  {
+    return M.map(atr[1], [M.MEMORY]);
+  }
+  else
+  {
+    return M.map(src, [M.MEMORY]);
+  }
+
+};
+
+module.exports = ifF;
+},{"./map":9}],9:[function(require,module,exports){
+/* jslint node: true */
+/* global describe, it, before, beforeEach, after, afterEach */
+
+'use strict';
 
 var M = {};
 module.exports = M;
 
-
+M.debug = false;
 var $W = M.$W = function(msg)
 {
 	console.log(msg);
@@ -731,7 +772,7 @@ var $W = M.$W = function(msg)
 
 var $L = M.$L = function(msg)
 {
-	if (debug)
+	if (M.debug)
 	{
 		if (typeof window === 'undefined')
 		{
@@ -748,8 +789,6 @@ var $L = M.$L = function(msg)
 		}
 	}
 };
-
-
 
 var MEMORY = M.MEMORY = 'MEMORY';
 var EACH = M.EACH = 'EACH';
@@ -787,7 +826,7 @@ var isNatveFunction = M.isNatveFunction = function(el)
 };
 
 
-//is Type Function is foundamental and used in $mapMEMORY, so cannot be exported
+//is Type Function is fundamental and used in $mapMEMORY, so cannot be exported
 var isType = M.isType = function(src, atr)
 {
 	var clas;
@@ -852,242 +891,167 @@ var $pop = M.$pop = function(arr)
 };
 
 
-
 var $content = M.$content = function(seq)
 {
 	return seq[0];
 };
 
-
-var $mapMEMORY = M.$mapMEMORY = function(src)
+M.map = function(src, atr)
 {
-	$L('############## mapMEM ################');
-	$L('----------- src --------------');
+	$L('map');
 	$L(src);
-	$L('------------------------------');
-
-	if (isType(src, FUNCTION_SEQUENCE))
+	$L(atr);
+	var $mapMEMORY = function(src)
 	{
-		$L('@@@@@========  FUNCTION_SEQUENCE ======= @@@@@');
+		$L('############## mapMEM ################');
+		$L('----------- src --------------');
 		$L(src);
-		return src;
-	}
-	else if (isType(src, DATA_SEQUENCE))
-	{
-		$L('@@@@@======== DATA_SEQUENCE =========@@@@@');
-		if (src.length === 0) //empty pair
-		{
-			return [];
-		}
-		else if ((src.length === 1) && (src[0] === FUNCTION_COMPOSITION))
-		{
-			$L('!!!!!!!!!!!!!!=====================src === [FUNCTION_COMPOSITION]!!!!!!!!!!!!!!');
-			return $mapMEMORY($pop(FUNCTION_COMPOSITION));
-		}
-		else
-		{
-			$L('----------------------------------');
-			var lastElement = src[src.length - 1];
-			$L('!!!!!!!!!!!!!!lastElement');
-			$L(lastElement);
+		$L('------------------------------');
 
-			if (!isType(lastElement, FUNCTION_SEQUENCE))
+		if (isType(src, FUNCTION_SEQUENCE))
+		{
+			$L('@@@@@========  FUNCTION_SEQUENCE ======= @@@@@');
+			$L(src);
+			return src;
+		}
+		else if (isType(src, DATA_SEQUENCE))
+		{
+			$L('@@@@@======== DATA_SEQUENCE =========@@@@@');
+			if (src.length === 0) //empty pair
 			{
-				$L('@@@@@ unOperatable DATA_SEQUENCE @@@@@');
-				$L(src);
-				return src;
+				return [];
+			}
+			else if ((src.length === 1) && (src[0] === FUNCTION_COMPOSITION))
+			{
+				$L('!!!!!!!!!!!!!!=====================src === [FUNCTION_COMPOSITION]!!!!!!!!!!!!!!');
+				return $mapMEMORY($pop(FUNCTION_COMPOSITION));
 			}
 			else
 			{
-				$L('@@@@@ Operatable DATA_SEQUENCE (the lastElement== f)@@@@@');
-				// src = [SRC, [plus, ATR]]
-				var f = lastElement[0];
-				var atr = lastElement[1];
+				$L('----------------------------------');
+				var lastElement = src[src.length - 1];
+				$L('!!!!!!!!!!!!!!lastElement');
+				$L(lastElement);
 
-				var srcsrc = src.slice(0, src.length - 1);
-
-				var result;
-				if (isNatveFunction(f)) // _f = plus
+				if (!isType(lastElement, FUNCTION_SEQUENCE))
 				{
-					if (!isType(srcsrc, DATA_SEQUENCE))
-						throw 'Invalid Format';
-					//$L('---srcsrc--------');
-					//$L(srcsrc);  [SRC]
-
-					result = f(srcsrc, atr); //plus([1],[2])
-
-					$L('---result--------');
-					$L(result);
-					return result;
+					$L('@@@@@ unOperatable DATA_SEQUENCE @@@@@');
+					$L(src);
+					return src;
 				}
-				else // _f = [FUNCTION_COMPOSITION,[plus, [1]],[plus, [2]]]
+				else
 				{
-					$L('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Custom Function &&&&&');
-					$L(f);
+					$L('@@@@@ Operatable DATA_SEQUENCE (the lastElement== f)@@@@@');
+					// src = [SRC, [plus, ATR]]
+					var f = lastElement[0];
+					var atr = lastElement[1];
 
-					// [FUNCTION_COMPOSITION] = srcsrc;
+					var srcsrc = src.slice(0, src.length - 1);
 
-					$push(FUNCTION_COMPOSITION, srcsrc);
-
-					for (var i = 0; i < atr.length; i++)
+					var result;
+					if (isNatveFunction(f)) // _f = plus
 					{
-						$push(VAL(i)
-							.wrapped_value, atr[i]);
+						if (!isType(srcsrc, DATA_SEQUENCE))
+							throw 'Invalid Format';
+						//$L('---srcsrc--------');
+						//$L(srcsrc);  [SRC]
+
+						result = f(srcsrc, atr); //plus([1],[2])
+
+						$L('---result--------');
+						$L(result);
+						return result;
+					}
+					else // _f = [FUNCTION_COMPOSITION,[plus, [1]],[plus, [2]]]
+					{
+						$L('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Custom Function &&&&&');
+						$L(f);
+
+						// [FUNCTION_COMPOSITION] = srcsrc;
+
+						$push(FUNCTION_COMPOSITION, srcsrc);
+
+						for (var i = 0; i < atr.length; i++)
+						{
+							$push(VAL(i)
+								.wrapped_value, atr[i]);
+						}
+
+						// f = _f[0][1][0];
+						// result = f(srcsrc, atr); //plus([1],[2])
+
+						result = $mapMEMORY(f);
+
+						$L('---result--------');
+						$L(result);
+						return result;
 					}
 
-					// f = _f[0][1][0];
-					// result = f(srcsrc, atr); //plus([1],[2])
-
-					result = $mapMEMORY(f);
-
-					$L('---result--------');
-					$L(result);
-					return result;
 				}
 
 			}
-
-		}
-	}
-	else
-	{
-		$L('@@@@@========= ATOM/OBJECT ========@@@@@');
-		$L('---result--------');
-		$L(src);
-
-		if (src.hasOwnProperty('wrapped_value'))
-		{
-			return $pop(src.wrapped_value);
 		}
 		else
 		{
-			return src;
+			$L('@@@@@========= ATOM/OBJECT ========@@@@@');
+			$L('---result--------');
+			$L(src);
+
+			if (src.hasOwnProperty('wrapped_value'))
+			{
+				return $pop(src.wrapped_value);
+			}
+			else
+			{
+				return src;
+			}
 		}
-	}
 
-};
-
-
-var $mapEACH = M.$mapEACH = function(src)
-{
-	$L('---$mapEACH ');
-	$L(src);
-	for (var i = 0; i < src.length; i++)
+	};
+	var $mapEACH = function(src)
 	{
-		$mapMEMORY(src[i]);
-	}　
-	return true;
-};
-
-
-var $mapCONSOLE = M.$mapCONSOLE = function(src)
-{
-	$L(' ---$mapCONSOLE  fn ----- ');
-
-	var result = $mapMEMORY(src);
-
-	$L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
-	$W($content(result)); //side effect
-
-	return result;
-};
-
-//======================================
-
-
-
-var bindClass = function(a)
-{
-	var x = a;
-
-	var obj = {
-		val: function()
+		//$L('---$mapEACH ');
+		//$L(src);
+		for (var i = 0; i < src.length; i++)
 		{
-			return x;
-		}
+			$mapMEMORY(src[i]);
+		}　
+		return true;
 	};
 
-	return obj;
-
-};
-},{"util":4}],8:[function(require,module,exports){
-/* jslint node: true */
-/* global describe, it, before, beforeEach, after, afterEach */
-
-'use strict';
-
-var doNothing = function(src, atr)
-{
-	return [];
-};
-
-module.exports = doNothing;
-},{}],9:[function(require,module,exports){
-/* jslint node: true */
-/* global describe, it, before, beforeEach, after, afterEach */
-
-'use strict';
-
-var M = require('./_core');
-
-var ifF = function(src, atr)
-{
-  //var bool = atr[0];
-  M.$L('!!!!!!!!!! ifF   !!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  M.$L(src);
-  M.$L(M.$type(src) === 'Array');
-
-  M.$L('!!atr!!');
-  M.$L(atr[0]); // [true]
-
-
-  if (M.$content(M.$mapMEMORY(atr[0])))
-  {
-    return M.$mapMEMORY(atr[1]);
-  }
-  else
-  {
-    return M.$mapMEMORY(src);
-  }
-
-};
-
-module.exports = ifF;
-},{"./_core":7}],10:[function(require,module,exports){
-/* jslint node: true */
-/* global describe, it, before, beforeEach, after, afterEach */
-
-'use strict';
-
-var M = require('./_core');
-
-var map = function(src, atr)
-{
-	var atr1 = atr[0];
-
-	if (atr1 === M.MEMORY)
+	var $mapCONSOLE = function(src)
 	{
-		return M.$mapMEMORY(src);
+		//$L(' ---$mapCONSOLE  fn ----- ');
+
+		var result = $mapMEMORY(src);
+
+		M.$L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
+		M.$W(M.$content(result)); //side effect
+
+		return result;
+	};
+
+	if ($content(atr) === MEMORY)
+	{
+		return $mapMEMORY(src);
 	}
-	if (atr1 === M.EACH)
+	if ($content(atr) === EACH)
 	{
-		return M.$mapMEMORY(src);
+		return $mapEACH(src);
 	}
-	if (atr1 === M.CONSOLE)
+	if ($content(atr) === CONSOLE)
 	{
-		return M.$mapCONSOLE(src);
+		return $mapCONSOLE(src);
 	}
 
 };
-
-module.exports = map;
-},{"./_core":7}],11:[function(require,module,exports){
+},{"util":4}],10:[function(require,module,exports){
 /* jslint node: true */
 /* global describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
 
-var M = require('./_core');
+var M = require('./map');
 
 var minus = function(src, atr)
 {
@@ -1097,13 +1061,13 @@ var minus = function(src, atr)
 };
 
 module.exports = minus;
-},{"./_core":7}],12:[function(require,module,exports){
+},{"./map":9}],11:[function(require,module,exports){
 /* jslint node: true */
 /* global describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
 
-var M = require('./_core');
+var M = require('./map');
 
 var plus = function(src, atr) //plus([1], [2]) = [3]
 {
@@ -1113,8 +1077,8 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
 	M.$L('---atr');
 	M.$L(atr);
 
-	var src1 = M.$mapMEMORY(src);
-	var atr1 = M.$mapMEMORY(atr);
+	var src1 = M.map(src, [M.MEMORY]);
+	var atr1 = M.map(atr, [M.MEMORY]);
 
 	M.$L('@@@src1');
 	M.$L(src1);
@@ -1146,7 +1110,7 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
 			}
 			else
 			{
-				var src2 = M.$mapMEMORY(M.$content(src1));
+				var src2 = M.map(M.$content(src1), [M.MEMORY]);
 				result = [];
 				for (var i = 0; i < src2.length; i++)
 				{
@@ -1171,18 +1135,18 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
 };
 
 module.exports = plus;
-},{"./_core":7}],13:[function(require,module,exports){
+},{"./map":9}],12:[function(require,module,exports){
 /* jslint node: true */
 /* global describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
 
-var M = require('./_core');
+var M = require('./map');
 
 var take = function(src, atr)
 {
-	var src1 = M.$content(M.$mapMEMORY(src));
-	var atr1 = M.$content(M.$mapMEMORY(atr));
+	var src1 = M.$content(M.map(src, [M.MEMORY]));
+	var atr1 = M.$content(M.map(atr, [M.MEMORY]));
 
 	if (M.isType(src1, M.DATA_SEQUENCE))
 	{
@@ -1213,46 +1177,40 @@ var take = function(src, atr)
 };
 
 module.exports = take;
-},{"./_core":7}],14:[function(require,module,exports){
-/* jslint node: true */
-/* global describe, it, before, beforeEach, after, afterEach */
+},{"./map":9}],13:[function(require,module,exports){
+     var SpaceTime_FunctionsDIR = './SpaceTime_Functions/';
+     var SpaceTime_coreFile = 'map.js';
+     console.log('{src f}   src -f-> ??');
+     console.log('');
+     console.log('SpaceTime modlue loading...');
+      //var M = require(SpaceTime_FunctionsDIR + SpaceTime_coreFile);
+      //require(STRING) must be raw STRING to be read by Browserify
+     var M = require('./SpaceTime_Functions/map.js');
+     module.exports = M;
+     console.log('Function: map(core)');
 
-'use strict';
+     var loadModulesFactory;
+     if (typeof window === 'undefined')
+     {
+       var modulePathHiddenFromBrowserify = './loadModulesFactory';
+       loadModulesFactory = require(modulePathHiddenFromBrowserify);
+     }
+     else
+     {
+       loadModulesFactory = require('./loadModulesFactoryBrowserify');
+     }
 
-var SpaceTime_FunctionsDIR = './SpaceTime_Functions/';
-var SpaceTime_coreFile = '_core.js';
-console.log('{src f}   src -f-> ??');
-console.log('');
-console.log('SpaceTime modlue loading...');
-//var M = require(SpaceTime_FunctionsDIR + SpaceTime_coreFile);
-//require(STRING) must be raw STRING to be read by Browserify
-var M = require('./SpaceTime_Functions/_core.js');
-module.exports = M;
-console.log('core module');
+     var obj = loadModulesFactory(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M);
+     M = obj.M;
+     var loadModules = M.loadModules = obj.func;
 
-var loadModulesFactory;
+     if (typeof describe === 'undefined')
+     {
+       loadModules(function()
+       {
+         M.$W('------------- SpaceTime ready ----------------');
 
-if (typeof window === 'undefined')
-{
-  var modulePathHiddenFromBrowserify = './loadModulesFactory';
-  loadModulesFactory = require(modulePathHiddenFromBrowserify);
-}
-else
-{
-  loadModulesFactory = require('./loadModulesFactoryBrowserify');
-}
-
-var obj = loadModulesFactory(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M);
-M = obj.M;
-var loadModules = M.loadModules = obj.func;
-
-if (typeof describe === 'undefined')
-{
-  loadModules(function()
-  {
-    M.$W('------------- SpaceTime ready ----------------');
-
-    var myF1 =
+         var myF1 =
             [
                   M.FUNCTION_COMPOSITION,
                   [M.plus, M.VAL(0)],
@@ -1260,7 +1218,7 @@ if (typeof describe === 'undefined')
                   [M.plus, M.VAL(2)]
             ];
 
-    var code =
+         var src =
             [
                   1,
                  [myF1, [[2], [3], [4]]],
@@ -1268,15 +1226,15 @@ if (typeof describe === 'undefined')
                  [M.map, [M.CONSOLE]]
             ];
 
-    M.$mapMEMORY(code);
+         M.map(src, [M.MEMORY]);
 
 
-    //------------------------------------------------------------------
-  });
-}
+         //------------------------------------------------------------------
+       });
+     }
 
-//=========================================
-},{"./SpaceTime_Functions/_core.js":7,"./loadModulesFactoryBrowserify":15}],15:[function(require,module,exports){
+      //=========================================
+},{"./SpaceTime_Functions/map.js":9,"./loadModulesFactoryBrowserify":14}],14:[function(require,module,exports){
 var loadModulesFactory = function(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M)
 {
   return {
@@ -1286,7 +1244,6 @@ var loadModulesFactory = function(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M)
       M.doNothing = require('./SpaceTime_Functions/doNothing.js');
       M.FIB = require('./SpaceTime_Functions/FIB.js');
       M.ifF = require('./SpaceTime_Functions/ifF.js');
-      M.map = require('./SpaceTime_Functions/map.js');
       M.minus = require('./SpaceTime_Functions/minus.js');
       M.NATURAL = require('./SpaceTime_Functions/NATURAL.js');
       M.plus = require('./SpaceTime_Functions/plus.js');
@@ -1299,4 +1256,4 @@ var loadModulesFactory = function(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M)
 };
 
 module.exports = loadModulesFactory;
-},{"./SpaceTime_Functions/FIB.js":5,"./SpaceTime_Functions/NATURAL.js":6,"./SpaceTime_Functions/doNothing.js":8,"./SpaceTime_Functions/ifF.js":9,"./SpaceTime_Functions/map.js":10,"./SpaceTime_Functions/minus.js":11,"./SpaceTime_Functions/plus.js":12,"./SpaceTime_Functions/take.js":13}]},{},[14])
+},{"./SpaceTime_Functions/FIB.js":5,"./SpaceTime_Functions/NATURAL.js":6,"./SpaceTime_Functions/doNothing.js":7,"./SpaceTime_Functions/ifF.js":8,"./SpaceTime_Functions/minus.js":10,"./SpaceTime_Functions/plus.js":11,"./SpaceTime_Functions/take.js":12}]},{},[13])
