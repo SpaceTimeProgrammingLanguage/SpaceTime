@@ -3,12 +3,10 @@
 
 'use strict';
 
-var debug = false;
-
 var M = {};
 module.exports = M;
 
-
+M.debug = false;
 var $W = M.$W = function(msg)
 {
 	console.log(msg);
@@ -16,7 +14,7 @@ var $W = M.$W = function(msg)
 
 var $L = M.$L = function(msg)
 {
-	if (debug)
+	if (M.debug)
 	{
 		if (typeof window === 'undefined')
 		{
@@ -142,6 +140,9 @@ var $content = M.$content = function(seq)
 
 M.map = function(src, atr)
 {
+	$L('map');
+	$L(src);
+	$L(atr);
 	var $mapMEMORY = function(src)
 	{
 		$L('############## mapMEM ################');
@@ -255,7 +256,7 @@ M.map = function(src, atr)
 		//$L(src);
 		for (var i = 0; i < src.length; i++)
 		{
-			M.$mapMEMORY(src[i]);
+			$mapMEMORY(src[i]);
 		}　
 		return true;
 	};
@@ -264,7 +265,7 @@ M.map = function(src, atr)
 	{
 		//$L(' ---$mapCONSOLE  fn ----- ');
 
-		var result = M.$mapMEMORY(src);
+		var result = $mapMEMORY(src);
 
 		M.$L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
 		M.$W(M.$content(result)); //side effect

@@ -3,7 +3,7 @@
 
 'use strict';
 
-var M = require('./_core');
+var M = require('./map');
 
 var minus = function(src, atr)
 {

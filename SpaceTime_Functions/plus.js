@@ -3,7 +3,7 @@
 
 'use strict';
 
-var M = require('./_core');
+var M = require('./map');
 
 var plus = function(src, atr) //plus([1], [2]) = [3]
 {
@@ -13,8 +13,8 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
 	M.$L('---atr');
 	M.$L(atr);
 
-	var src1 = M.map(src, M.MEMORY);
-	var atr1 = M.map(atr, M.MEMORY);
+	var src1 = M.map(src, [M.MEMORY]);
+	var atr1 = M.map(atr, [M.MEMORY]);
 
 	M.$L('@@@src1');
 	M.$L(src1);
@@ -46,7 +46,7 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
 			}
 			else
 			{
-				var src2 = M.map(M.$content(src1), M.MEMORY);
+				var src2 = M.map(M.$content(src1), [M.MEMORY]);
 				result = [];
 				for (var i = 0; i < src2.length; i++)
 				{

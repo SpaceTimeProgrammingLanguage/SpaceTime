@@ -1,5 +1,5 @@
      var SpaceTime_FunctionsDIR = './SpaceTime_Functions/';
-     var SpaceTime_coreFile = '_core.js';
+     var SpaceTime_coreFile = 'map.js';
      console.log('{src f}   src -f-> ??');
      console.log('');
      console.log('SpaceTime modlue loading...');
@@ -7,10 +7,9 @@
       //require(STRING) must be raw STRING to be read by Browserify
      var M = require('./SpaceTime_Functions/map.js');
      module.exports = M;
-     console.log('core module');
+     console.log('Function: map(core)');
 
      var loadModulesFactory;
-
      if (typeof window === 'undefined')
      {
        var modulePathHiddenFromBrowserify = './loadModulesFactory';
@@ -39,7 +38,7 @@
                   [M.plus, M.VAL(2)]
             ];
 
-         var code =
+         var src =
             [
                   1,
                  [myF1, [[2], [3], [4]]],
@@ -47,7 +46,7 @@
                  [M.map, [M.CONSOLE]]
             ];
 
-         M.$mapMEMORY(code);
+         M.map(src, [M.MEMORY]);
 
 
          //------------------------------------------------------------------

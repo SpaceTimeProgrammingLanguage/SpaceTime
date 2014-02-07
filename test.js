@@ -3,6 +3,8 @@
 
 'use strict';
 
+var debug = false;
+
 var expect = require('chai')
     .expect;
 
@@ -17,6 +19,7 @@ describe('=============================== SpaceTime TEST =======================
                 M.loadModules(
                     function()
                     {
+                        M.debug = debug;
                         done();
                     });
             });
@@ -34,7 +37,7 @@ describe('======================================================================
                     {
                         var src = [];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([]);
                     });
 
@@ -53,7 +56,7 @@ describe('======================================================================
                     {
                         var src = [5];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([5]);
                     });
             });
@@ -70,7 +73,7 @@ describe('======================================================================
                     {
                         var src = [5, 7];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([5, 7]);
                     });
             });
@@ -87,7 +90,7 @@ describe('======================================================================
                     {
                         var src = [5, 7, 3];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([5, 7, 3]);
                     });
             });
@@ -106,7 +109,7 @@ describe('======================================================================
                     {
                         var src = [1, [2, 3]];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([1, [2, 3]]);
                     });
             });
@@ -124,7 +127,7 @@ describe('======================================================================
                     {
                         var src = ["hello world"];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql(["hello world"]);
                     });
             });
@@ -146,7 +149,7 @@ describe('======================================================================
                                       [M.map, [M.CONSOLE]]
                                  ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql(["hello world"]);
                     });
             });
@@ -168,7 +171,7 @@ describe('======================================================================
                                           [M.map, [M.CONSOLE]]
                                      ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql(["hello world"]);
                     });
             });
@@ -188,7 +191,7 @@ describe('======================================================================
                               [M.map, [M.CONSOLE]]
                          ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([[1, 2, 3]]);
                     });
             });
@@ -207,7 +210,7 @@ describe('======================================================================
                     {
                         var src = [1, [M.plus, [2]]];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([3]);
                     });
             });
@@ -224,7 +227,7 @@ describe('======================================================================
                     {
                         var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([3]);
                     });
             });
@@ -247,7 +250,7 @@ describe('======================================================================
                                [M.plus, [3]]
                             ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([6]);
                     });
             });
@@ -270,7 +273,7 @@ describe('======================================================================
                                [M.plus, [5]]
                             ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([11]);
                     });
             });
@@ -293,7 +296,7 @@ describe('======================================================================
 
                             ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([9]);
                     });
             });
@@ -315,7 +318,7 @@ describe('======================================================================
                                 [M.plus, [2]]
                             ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([[5]]);
                     });
             });
@@ -338,7 +341,7 @@ describe('======================================================================
                                 [M.plus, [2]]
                             ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([[6]]);
                     });
             });
@@ -361,7 +364,7 @@ describe('======================================================================
                                 [M.plus, [2]]
                             ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([[3, 4, 5]]);
                     });
             });
@@ -384,7 +387,7 @@ describe('======================================================================
                                 [M.take, [3]]
                             ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([[1, 2, 3]]);
                     });
             });
@@ -409,7 +412,7 @@ describe('======================================================================
 
                                 ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]);
                     });
             });
@@ -432,7 +435,7 @@ describe('======================================================================
 
                                 ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]]);
                     });
             });
@@ -457,7 +460,7 @@ describe('======================================================================
 
                                 ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql(
                                 [[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]]);
                     });
@@ -479,7 +482,7 @@ describe('======================================================================
                               [M.ifF, [[true], [2]]]
                           ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([2]);
                     });
             });
@@ -500,7 +503,7 @@ describe('======================================================================
                             [M.ifF, [[true], [2]]]
                          ];
 
-                        expect(M.map(src, M.MEMORY))
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([2]);
                     });
             });
@@ -521,44 +524,44 @@ describe('======================================================================
                             [M.ifF, [[false], [2]]]
                          ];
 
-                        expect(M.map(src, M.MEMORY)
+                        expect(M.map(src, [M.MEMORY]))
                             .to.eql([1]);
-                        });
-                });
-        });
+                    });
+            });
+    });
 
-    describe('===================================================================================',
-        function()
-        {
-            describe(' if ',
-                function()
-                {
-                    it('to write ',
-                        function()
-                        {
-                            var src = [
+describe('===================================================================================',
+    function()
+    {
+        describe(' if ',
+            function()
+            {
+                it('to write ',
+                    function()
+                    {
+                        var src = [
                             0,
                             [M.ifF, [[false], [1]]],
                             [M.ifF, [[false], [2]]]
                          ];
 
-                            expect(M.map(src, M.MEMORY))
-                                .to.eql([0]);
-                        });
-                });
+                        expect(M.map(src, [M.MEMORY]))
+                            .to.eql([0]);
+                    });
+            });
 
-        });
+    });
 
-    describe('===================================================================================',
-        function()
-        {
-            describe('Function Composition',
-                function()
-                {
-                    it('to write ',
-                        function()
-                        {
-                            var myF1 =
+describe('===================================================================================',
+    function()
+    {
+        describe('Function Composition',
+            function()
+            {
+                it('to write ',
+                    function()
+                    {
+                        var myF1 =
                                 [
                                       M.FUNCTION_COMPOSITION,
                                       [M.plus, M.VAL(0)],
@@ -566,7 +569,7 @@ describe('======================================================================
                                       [M.plus, M.VAL(2)]
                                 ];
 
-                            var src =
+                        var src =
                                 [
                                      1,
                                      [myF1, [[2], [3], [4]]],
@@ -574,14 +577,14 @@ describe('======================================================================
                                      [M.map, [M.CONSOLE]]
                                 ];
 
-                            expect(M.map(src, M.MEMORY))
-                                .to.eql([20]);
-                        });
-                });
+                        expect(M.map(src, [M.MEMORY]))
+                            .to.eql([20]);
+                    });
+            });
 
-        });
+    });
 
-    var samplesrc =
+var samplesrc =
                         [
                              99,
                              [M.plus, [1]],
@@ -589,16 +592,16 @@ describe('======================================================================
                         ];
 
 
-    describe('===================================================================================',
-        function()
-        {
-            describe(' doNothing does nothing else but return ()',
-                function()
-                {
-                    it('( AnySequence (doNothing ()) ) = () ',
-                        function()
-                        {
-                            var src =
+describe('===================================================================================',
+    function()
+    {
+        describe(' doNothing does nothing else but return ()',
+            function()
+            {
+                it('( AnySequence (doNothing ()) ) = () ',
+                    function()
+                    {
+                        var src =
                           [
                               0,
                               [M.ifF, [[false], [1]]],
@@ -606,11 +609,11 @@ describe('======================================================================
                               [M.doNothing, []]
                           ];
 
-                            expect(M.map(src, M.MEMORY))
-                                .to.eql([]);
-                        });
-                });
-        });
+                        expect(M.map(src, [M.MEMORY]))
+                            .to.eql([]);
+                    });
+            });
+    });
 
 
-    //------------------------------------
+//------------------------------------
