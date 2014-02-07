@@ -13,8 +13,8 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
 	M.$L('---atr');
 	M.$L(atr);
 
-	var src1 = M.$mapMEMORY(src);
-	var atr1 = M.$mapMEMORY(atr);
+	var src1 = M.map(src, M.MEMORY);
+	var atr1 = M.map(atr, M.MEMORY);
 
 	M.$L('@@@src1');
 	M.$L(src1);
@@ -46,7 +46,7 @@ var plus = function(src, atr) //plus([1], [2]) = [3]
 			}
 			else
 			{
-				var src2 = M.$mapMEMORY(M.$content(src1));
+				var src2 = M.map(M.$content(src1), M.MEMORY);
 				result = [];
 				for (var i = 0; i < src2.length; i++)
 				{

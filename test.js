@@ -32,9 +32,9 @@ describe('======================================================================
                 it('() = ()',
                     function()
                     {
-                        var code = [];
+                        var src = [];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([]);
                     });
 
@@ -51,9 +51,9 @@ describe('======================================================================
                 it('(5) = (5)',
                     function()
                     {
-                        var code = [5];
+                        var src = [5];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([5]);
                     });
             });
@@ -68,9 +68,9 @@ describe('======================================================================
                 it('(5 7) = (5 7)',
                     function()
                     {
-                        var code = [5, 7];
+                        var src = [5, 7];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([5, 7]);
                     });
             });
@@ -85,9 +85,9 @@ describe('======================================================================
                 it('(5 7 3) = (5 7 3)',
                     function()
                     {
-                        var code = [5, 7, 3];
+                        var src = [5, 7, 3];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([5, 7, 3]);
                     });
             });
@@ -104,9 +104,9 @@ describe('======================================================================
                 it('(1 (2 3)) = (1 (2 3))',
                     function()
                     {
-                        var code = [1, [2, 3]];
+                        var src = [1, [2, 3]];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([1, [2, 3]]);
                     });
             });
@@ -122,9 +122,9 @@ describe('======================================================================
                 it('("hello world") = ("hello world")',
                     function()
                     {
-                        var code = ["hello world"];
+                        var src = ["hello world"];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql(["hello world"]);
                     });
             });
@@ -140,13 +140,13 @@ describe('======================================================================
                 it('("hello world" (map (CONSOLE))) = ("hello world")',
                     function()
                     {
-                        var code =
+                        var src =
                                  [
                                       "hello world",
                                       [M.map, [M.CONSOLE]]
                                  ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql(["hello world"]);
                     });
             });
@@ -161,14 +161,14 @@ describe('======================================================================
                 it('("hello world"  (map (CONSOLE))  (map (CONSOLE))) = ("hello world")',
                     function()
                     {
-                        var code =
+                        var src =
                                      [
                                           "hello world",
                                           [M.map, [M.CONSOLE]],
                                           [M.map, [M.CONSOLE]]
                                      ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql(["hello world"]);
                     });
             });
@@ -183,12 +183,12 @@ describe('======================================================================
                 it('((1 2 3) (map (CONSOLE))) = ((1 2 3))',
                     function()
                     {
-                        var code = [
+                        var src = [
                               [1, 2, 3],
                               [M.map, [M.CONSOLE]]
                          ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([[1, 2, 3]]);
                     });
             });
@@ -205,9 +205,9 @@ describe('======================================================================
                 it('(1 (plus (2)))   =(3)',
                     function()
                     {
-                        var code = [1, [M.plus, [2]]];
+                        var src = [1, [M.plus, [2]]];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([3]);
                     });
             });
@@ -222,9 +222,9 @@ describe('======================================================================
                 it('(1 (plus (2)) (map (CONSOLE)))  =(3)',
                     function()
                     {
-                        var code = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
+                        var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([3]);
                     });
             });
@@ -240,14 +240,14 @@ describe('======================================================================
                 it('(1 (plus (2)) (plus (3)))   =(6)',
                     function()
                     {
-                        var code =
+                        var src =
                             [
                                1,
                                [M.plus, [2]],
                                [M.plus, [3]]
                             ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([6]);
                     });
             });
@@ -262,7 +262,7 @@ describe('======================================================================
                 it('(1 (plus (2)) (plus (3)) (plus (5)))   =(11)',
                     function()
                     {
-                        var code =
+                        var src =
                             [
                                1,
                                [M.plus, [2]],
@@ -270,7 +270,7 @@ describe('======================================================================
                                [M.plus, [5]]
                             ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([11]);
                     });
             });
@@ -286,14 +286,14 @@ describe('======================================================================
                 it('(1 (plus (5 (plus (3)))))   =(9)',
                     function()
                     {
-                        var code =
+                        var src =
                             [
                                 1,
                                 [M.plus, [5, [M.plus, [3]]]]
 
                             ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([9]);
                     });
             });
@@ -309,13 +309,13 @@ describe('======================================================================
                 it('((1 (plus (2))) (plus (2)))   =((5))',
                     function()
                     {
-                        var code =
+                        var src =
                             [
                                 [1, [M.plus, [2]]],
                                 [M.plus, [2]]
                             ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([[5]]);
                     });
             });
@@ -332,13 +332,13 @@ describe('======================================================================
                 it('((1 (plus (1 (plus (2))))) (plus (2)))   =((6))',
                     function()
                     {
-                        var code =
+                        var src =
                             [
                                 [1, [M.plus, [1, [M.plus, [2]]]]],
                                 [M.plus, [2]]
                             ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([[6]]);
                     });
             });
@@ -355,13 +355,13 @@ describe('======================================================================
                 it('((1 2 3) (plus (2)))   =((3 4 5))',
                     function()
                     {
-                        var code =
+                        var src =
                             [
                                 [1, 2, 3],
                                 [M.plus, [2]]
                             ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([[3, 4, 5]]);
                     });
             });
@@ -378,13 +378,13 @@ describe('======================================================================
                 it('((1 2 3 4 5) (take (3)))   =((1 2 3))',
                     function()
                     {
-                        var code =
+                        var src =
                             [
                                 [1, 2, 3, 4, 5],
                                 [M.take, [3]]
                             ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([[1, 2, 3]]);
                     });
             });
@@ -401,7 +401,7 @@ describe('======================================================================
                 it('(NATURAL (take (10)))   =((0 1 2 3 4 5 6 7 8 9))',
                     function()
                     {
-                        var code =
+                        var src =
                                 [
 
                                     M.NATURAL,
@@ -409,7 +409,7 @@ describe('======================================================================
 
                                 ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]);
                     });
             });
@@ -425,14 +425,14 @@ describe('======================================================================
                 it('(FIB (take (10)))   =((1 1 2 3 5 8 13 21 34 55))',
                     function()
                     {
-                        var code =
+                        var src =
                                 [
                                     M.FIB,
                                     [M.take, [10]]
 
                                 ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]]);
                     });
             });
@@ -448,7 +448,7 @@ describe('======================================================================
                 it('( FIB (take (10)) (map (CONSOLE)) )  = ((1 1 2 3 5 8 13 21 34 55)) ',
                     function()
                     {
-                        var code =
+                        var src =
                                 [
 
                                     M.FIB,
@@ -457,7 +457,7 @@ describe('======================================================================
 
                                 ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql(
                                 [[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]]);
                     });
@@ -473,13 +473,13 @@ describe('======================================================================
                 it('to write ',
                     function()
                     {
-                        var code = [
+                        var src = [
                               0,
                               [M.ifF, [[false], [1]]],
                               [M.ifF, [[true], [2]]]
                           ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([2]);
                     });
             });
@@ -494,13 +494,13 @@ describe('======================================================================
                 it('to write ',
                     function()
                     {
-                        var code = [
+                        var src = [
                             0,
                             [M.ifF, [[true], [1]]],
                             [M.ifF, [[true], [2]]]
                          ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY))
                             .to.eql([2]);
                     });
             });
@@ -515,50 +515,50 @@ describe('======================================================================
                 it('to write ',
                     function()
                     {
-                        var code = [
+                        var src = [
                             0,
                             [M.ifF, [[true], [1]]],
                             [M.ifF, [[false], [2]]]
                          ];
 
-                        expect(M.$mapMEMORY(code))
+                        expect(M.map(src, M.MEMORY)
                             .to.eql([1]);
-                    });
-            });
-    });
+                        });
+                });
+        });
 
-describe('===================================================================================',
-    function()
-    {
-        describe(' if ',
-            function()
-            {
-                it('to write ',
-                    function()
-                    {
-                        var code = [
+    describe('===================================================================================',
+        function()
+        {
+            describe(' if ',
+                function()
+                {
+                    it('to write ',
+                        function()
+                        {
+                            var src = [
                             0,
                             [M.ifF, [[false], [1]]],
                             [M.ifF, [[false], [2]]]
                          ];
 
-                        expect(M.$mapMEMORY(code))
-                            .to.eql([0]);
-                    });
-            });
+                            expect(M.map(src, M.MEMORY))
+                                .to.eql([0]);
+                        });
+                });
 
-    });
+        });
 
-describe('===================================================================================',
-    function()
-    {
-        describe('Function Composition',
-            function()
-            {
-                it('to write ',
-                    function()
-                    {
-                        var myF1 =
+    describe('===================================================================================',
+        function()
+        {
+            describe('Function Composition',
+                function()
+                {
+                    it('to write ',
+                        function()
+                        {
+                            var myF1 =
                                 [
                                       M.FUNCTION_COMPOSITION,
                                       [M.plus, M.VAL(0)],
@@ -566,7 +566,7 @@ describe('======================================================================
                                       [M.plus, M.VAL(2)]
                                 ];
 
-                        var code =
+                            var src =
                                 [
                                      1,
                                      [myF1, [[2], [3], [4]]],
@@ -574,14 +574,14 @@ describe('======================================================================
                                      [M.map, [M.CONSOLE]]
                                 ];
 
-                        expect(M.$mapMEMORY(code))
-                            .to.eql([20]);
-                    });
-            });
+                            expect(M.map(src, M.MEMORY))
+                                .to.eql([20]);
+                        });
+                });
 
-    });
+        });
 
-var samplecode =
+    var samplesrc =
                         [
                              99,
                              [M.plus, [1]],
@@ -589,16 +589,16 @@ var samplecode =
                         ];
 
 
-describe('===================================================================================',
-    function()
-    {
-        describe(' doNothing does nothing else but return ()',
-            function()
-            {
-                it('( AnySequence (doNothing ()) ) = () ',
-                    function()
-                    {
-                        var code =
+    describe('===================================================================================',
+        function()
+        {
+            describe(' doNothing does nothing else but return ()',
+                function()
+                {
+                    it('( AnySequence (doNothing ()) ) = () ',
+                        function()
+                        {
+                            var src =
                           [
                               0,
                               [M.ifF, [[false], [1]]],
@@ -606,11 +606,11 @@ describe('======================================================================
                               [M.doNothing, []]
                           ];
 
-                        expect(M.$mapMEMORY(code))
-                            .to.eql([]);
-                    });
-            });
-    });
+                            expect(M.map(src, M.MEMORY))
+                                .to.eql([]);
+                        });
+                });
+        });
 
 
-//------------------------------------
+    //------------------------------------

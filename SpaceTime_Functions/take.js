@@ -7,8 +7,8 @@ var M = require('./_core');
 
 var take = function(src, atr)
 {
-	var src1 = M.$content(M.$mapMEMORY(src));
-	var atr1 = M.$content(M.$mapMEMORY(atr));
+	var src1 = M.$content(M.map(src, M.MEMORY));
+	var atr1 = M.$content(M.map(atr, M.MEMORY));
 
 	if (M.isType(src1, M.DATA_SEQUENCE))
 	{

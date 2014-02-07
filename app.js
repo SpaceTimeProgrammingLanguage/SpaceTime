@@ -5,7 +5,7 @@
      console.log('SpaceTime modlue loading...');
       //var M = require(SpaceTime_FunctionsDIR + SpaceTime_coreFile);
       //require(STRING) must be raw STRING to be read by Browserify
-     var M = require('./SpaceTime_Functions/_core.js');
+     var M = require('./SpaceTime_Functions/map.js');
      module.exports = M;
      console.log('core module');
 
