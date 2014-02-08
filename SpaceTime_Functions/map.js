@@ -6,7 +6,7 @@
 var M = {};
 module.exports = M;
 
-M.debug = false;
+M.debug = false; //just default, change this value @ test or app.js
 var $W = M.$W = function(msg)
 {
 	console.log(msg);

@@ -145,11 +145,8 @@
 
          var parse = function(src)
          {
-           //    wt('========== parse ===========');
-           //   wt(src);
-           // wt(src.length);
-           M.$W('------------- parse ----------------');
-           M.$W(src);
+           // M.$W('------------- parse ----------------');
+           // M.$W(src);
 
            var maybeNumberString = function(src)
            {
@@ -165,7 +162,16 @@
              }
              else
              {
-               return M[src];
+               var src1;
+
+               if (src === '+')
+                 src1 = 'plus';
+               else if (src === '-')
+                 src1 = 'minus';
+               else
+                 src1 = src;
+
+               return M[src1];
              }
            };
 
@@ -258,13 +264,14 @@
 
          //============================================
          // var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
-         //  var src = ' ( 1 (plus(2)) (map(CONSOLE)) ) ';
+         var src = ' ( 1(+(2(+(3)))) (map(CONSOLE)) ) ';
 
-         var src = ' ("hel()lo"(map(CONSOLE)) (map(CONSOLE))(map(CONSOLE))) ';
+         //  var src = ' (NATURAL (take(10)) (map(CONSOLE))) ';
 
+         M.debug = false;
          var src1 = parse(trim(src));
-         M.$W('src1 to mamMemory');
-         M.$W(src1);
+         M.$L('src1 to mamMemory');
+         M.$L(src1);
          M.map(src1, [M.MEMORY]);
 
 
