@@ -28,25 +28,244 @@
      {
        loadModules(function()
        {
-         M.$W('------------- SpaceTime ready ----------------');
+         M.$W('------------- SpaceTime Module is Ready ----------------');
 
-         var myF1 =
-            [
-                  M.FUNCTION_COMPOSITION,
-                  [M.plus, M.VAL(0)],
-                  [M.plus, M.VAL(1)],
-                  [M.plus, M.VAL(2)]
-            ];
+         String.prototype.replaceAll = function(org, dest)
+         {
+           return this
+             .split(org)
+             .join(dest);
+         };
 
-         var src =
-            [
-                  1,
-                 [myF1, [[2], [3], [4]]],
-                 [myF1, [[7], [1], [2]]],
-                 [M.map, [M.CONSOLE]]
-            ];
+         var sqSymbol = '_____sq_____';
+         var sqKey = 'sq___';
 
-         M.map(src, [M.MEMORY]);
+         //==========================
+         var cmtprts = ['//', '/*', '*/', '(', ')', '\n', ' ', '　'];
+         var cmtprtsE = cmtprts.map(function(s, i)
+         {
+           return '______mark______' + i;
+         });
+         //==========================
+
+         var restoreMark = function(src)
+         {
+           // "thisisareplacement"+i  restore to normal string
+           var src1 = [];
+
+           cmtprtsE.map(function(mark, mark_i)
+           {
+             var data;
+             if (mark_i === 0)
+             {
+               data = src;
+             }
+             else
+             {
+               data = src1[mark_i - 1];
+             }
+             src1[mark_i] = data.replaceAll(mark, cmtprts[mark_i]);
+
+           });
+           return src1[src1.length - 1];
+         };
+
+         var trim = function(src)
+         {
+
+           var strgs = src.match(/"(?:[^\\"]|\\.)*"/ig);
+           var strgs1 = [];
+           var src1 = [];
+
+           var src2;
+           // escape cmtprts  during each Strings
+           if (strgs)
+           {
+             strgs.map(function(str, str_i)
+             {
+               var str1 = [];
+               cmtprts.map(function(mark, mark_i)
+               {
+                 var data;
+                 if (mark_i === 0)
+                 {
+                   data = str;
+                 }
+                 else
+                 {
+                   data = str1[mark_i - 1];
+                 }
+
+                 str1[mark_i] = data.replaceAll(mark, cmtprtsE[mark_i]);
+               });
+
+               strgs1[str_i] = str1[str1.length - 1];
+
+               var data1;
+
+               if (str_i === 0)
+               {
+                 data1 = src;
+               }
+               else
+               {
+                 data1 = src1[str_i - 1];
+               }
+
+               src1[str_i] = data1.replaceAll(strgs[str_i], strgs1[str_i]);
+
+             });
+
+             src2 = src1[src1.length - 1];
+           }
+           else
+           {
+             src2 = src;
+           }
+
+           // comment out removing
+           var re2 = new RegExp('//.*?(?=[\\n\\r]+|$)|/[*](.|\n)*?[*]/', 'g');
+           var src3 = src2
+             .replace(re2, '');
+
+           //beautifly
+           var src4 = src3.replaceAll('\n', ' '); //linebreak -> single space
+           var src5 = src4.replaceAll('　', ' '); //zenkaku>hankaku
+           var src6 = src5.replace(/[　\s]+/g, ' '); // trim extra spaces
+           var src7 = src6.replace(/(\()\s+|\s+(\))/g, '$1$2'); //trim a space after '(' and before ')'.
+           var src8 = src7.replace(/(\[)\s+|\s+(\])/g, '$1$2'); //trim a space after '[' and before ']'.
+           var src9 = src8.replace(/(\S|^)\(/g, '$1 ('); //foo(  -> foo (
+
+
+           return src9;
+
+         };
+
+
+
+         var parse = function(src)
+         {
+           //    wt('========== parse ===========');
+           //   wt(src);
+           // wt(src.length);
+           M.$W('------------- parse ----------------');
+           M.$W(src);
+
+           var maybeNumberString = function(src)
+           {
+             var s1 = src * 1;
+             var s2 = '' + s1;
+             if (src === s2) // naked number
+             {
+               return s1;
+             }
+             else if (src.indexOf('"') !== -1) // '"some string"'
+             {
+               return restoreMark(src.substring(1, src.length - 1));
+             }
+             else
+             {
+               return M[src];
+             }
+           };
+
+           if (src.indexOf('(') === -1)
+           {
+             return maybeNumberString(src);
+           }
+           else
+           {
+
+             var indexHead;
+             var indexTail;
+             var count = [];
+             var previousCount;
+
+             var space = [];
+             for (var i = 0; i < src.length; i++)
+             {
+               // wt('> ' + src[i]);
+               if (i === 0)
+                 previousCount = 0;
+               else
+                 previousCount = count[i - 1];
+
+               if ((previousCount === 1) && (src[i] === ' '))
+                 space[space.length] = i;
+
+               if (src[i] === '(')
+                 count[i] = previousCount + 1;
+               else if (src[i] === ')')
+                 count[i] = previousCount - 1;
+               else
+                 count[i] = previousCount;
+
+               if ((previousCount === 0) && (count[i] === 1))
+               {
+                 indexHead = i;
+               }
+
+               if ((previousCount === 1) && (count[i] === 0))
+               {
+                 indexTail = i;
+               }
+
+               //   wt('count ' + count[i]);
+
+             }
+
+             //   wt(indexHead);
+             //   wt(indexTail);
+             //  wt(space);
+
+             var src1 = src.substring(indexHead + 1, indexTail);
+
+             // wt(src1);
+
+             var array = [];
+
+             if (space.length === 0)
+             {
+               array[0] = maybeNumberString(src1);
+               return array;
+             }
+             else
+             {
+               for (var j = 0; j < space.length; j++)
+               {
+                 if (j === 0)
+                 {
+                   array[array.length] = parse(src.substring(indexHead + 1, space[j]));
+                 }
+                 if (j === space.length - 1)
+                 {
+                   array[array.length] = parse(src.substring(space[j] + 1, indexTail));
+                 }
+                 else
+                 {
+                   array[array.length] = parse(src.substring(space[j] + 1, space[j + 1]));
+                 }
+               }
+               //wt('---return');
+               //wt(array);
+
+               return array;
+             }
+           }
+
+         };
+
+
+         //============================================
+         // var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
+         //  var src = ' ( 1 (plus(2)) (map(CONSOLE)) ) ';
+
+         var src = ' ("hel()lo"(map(CONSOLE)) (map(CONSOLE))(map(CONSOLE))) ';
+
+         var src1 = parse(trim(src));
+         M.$W('src1 to mamMemory');
+         M.$W(src1);
+         M.map(src1, [M.MEMORY]);
 
 
          //------------------------------------------------------------------
