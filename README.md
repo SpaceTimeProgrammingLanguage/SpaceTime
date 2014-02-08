@@ -1,15 +1,34 @@
-SpaceTime
-=========
+#SpaceTime Programming Language
+The Spacetime Operating Language
 
-new functional programming language: SpaceTime
 
-http://spacetimeprogramminglanguage.github.io
+***SpaceTime*** 
+#### - is a Functional Reactive Programming (FRP) language
+#### - employs Lazy evaluation strategy
+#### - runs on JavaScript Engines (browsers & node.js)
+#### - is written in JavaScript
 
-##Introduction
+##Hello world
+---
 
-SpaceTime is an new functional programming language.
+```
+(
+   "Hello world"
+   (map (CONSOLE))
+)
+
+```
+
+##Foundation
+---
+
+*Inspired by John McCarthy's LISP*
+
+Inverted data structure of [S-expression](http://en.wikipedia.org/wiki/S-expression)
  
 
 ##Getting Started
 
-`npm test`
+### [SpaceTime Functional Programming Language WebSite](http://SpaceTimeProgrammingLanguage.github.io)
+
+ 
