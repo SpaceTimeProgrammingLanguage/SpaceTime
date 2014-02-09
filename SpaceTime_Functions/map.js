@@ -257,7 +257,7 @@ M.map = function(src, atr)
 		for (var i = 0; i < src.length; i++)
 		{
 			$mapMEMORY(src[i]);
-		}　
+		}
 		return true;
 	};
 
