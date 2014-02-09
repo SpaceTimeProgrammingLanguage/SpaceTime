@@ -4,11 +4,10 @@
 'use strict';
 var M = require('./map');
 
-var NATURAL = {
-	f: function()
-	{
-		return M.SEQ.i;
-	}
-};
+var NATURAL = function()
+{
+	//return M.SEQ.i;
+}();
+
 
 module.exports = NATURAL;
