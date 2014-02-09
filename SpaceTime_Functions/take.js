@@ -23,17 +23,19 @@ var take = function(src, atr)
 	else
 	{
 		M.$L('-----take src is Object');
-		var i = 0;
+		M.$L('' + src1);
+
+		M.SEQ.i = 0;
 		var out = [];
 
 		while (true)
 		{
-			out[i] = src1.f(i);
+			out[M.SEQ.i] = M.SEQ[M.SEQ.i] = src1();
 
 			if (out.length === atr1)
 				return [out];
 
-			i++;
+			M.SEQ.i++;
 		}
 	}
 };

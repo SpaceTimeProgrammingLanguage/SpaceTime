@@ -264,9 +264,18 @@
 
          //============================================
          // var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
-         var src = ' ( 1(+(2(+(3)))) (map(CONSOLE)) ) ';
+         // var src = ' ( 1(+(2(+(3)))) (map(CONSOLE)) ) ';
 
-         //  var src = ' (NATURAL (take(10)) (map(CONSOLE))) ';
+         //  var src = ' (FIB (take(10)) (map(CONSOLE))) ';
+         var src = ' (SEQ  (iterate ())  (take(10)) (map(CONSOLE))) ';
+
+         //  var src = ' (NATURAL  (take(10)) (map(CONSOLE))) ';
+
+         /*  (
+             FUNCTION_COMPOSITION VAL0(get(i(-(2))))(+(VAL0(get(i(-(1))))))
+             (ifF((i <= 1)(1))))
+
+         )*/
 
          M.debug = false;
          var src1 = parse(trim(src));
