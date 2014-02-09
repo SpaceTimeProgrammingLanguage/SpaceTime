@@ -70,7 +70,7 @@
            return src1[src1.length - 1];
          };
 
-         var trim = function(src)
+         var trim = M.trim = function(src)
          {
 
            var strgs = src.match(/"(?:[^\\"]|\\.)*"/ig);
@@ -143,7 +143,7 @@
 
 
 
-         var parse = function(src)
+         var parse = M.parse = function(src)
          {
            // M.$W('------------- parse ----------------');
            // M.$W(src);
