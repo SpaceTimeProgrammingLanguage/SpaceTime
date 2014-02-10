@@ -1409,8 +1409,8 @@ module.exports = take;
 
      var $parse = M.$parse = function(src)
      {
-       //   M.$W('------------- parse ----------------');
-       //   M.$W(src);
+       // M.$W('------------- parse ----------------');
+       // M.$W(src);
 
        var maybeNumberString = function(src)
        {
@@ -1439,12 +1439,22 @@ module.exports = take;
          }
        };
 
+
+       //// M.$W("!!!!!!!!!!!src");
+       // M.$W(src.length);
+
        if (src.indexOf('(') === -1)
        {
          return maybeNumberString(src);
        }
+       else if (src.match(/().*/))
+       {
+         //   M.$W('src === ()');
+         return [];
+       }
        else
        {
+         //  M.$W('some seq');
 
          var indexHead;
          var indexTail;
@@ -1484,20 +1494,23 @@ module.exports = take;
 
          }
 
-         //   wt(indexHead);
-         //   wt(indexTail);
-         //  wt(space);
+         //  M.$W(indexHead);
+         //  M.$W(indexTail);
+         //  M.$W(space);
 
          var src1 = src.substring(indexHead + 1, indexTail);
-
-         // wt(src1);
+         // M.$W("-----------src1");
+         //  M.$W(src1);
 
          var array = [];
 
          if (space.length === 0)
          {
            array[0] = maybeNumberString(src1);
+           // M.$W('---return');
+           // M.$W(array);
            return array;
+
          }
          else
          {
@@ -1516,8 +1529,8 @@ module.exports = take;
                array[array.length] = $parse(src.substring(space[j] + 1, space[j + 1]));
              }
            }
-           //wt('---return');
-           //wt(array);
+           M.$W('---return');
+           M.$W(array);
 
            return array;
          }
@@ -1573,7 +1586,7 @@ module.exports = take;
          // var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
          // var src = ' ( 1(+(2(+(3)))) (map(CONSOLE)) ) ';
 
-         var src = '( "hihu   ihi" (map (    CONSOLE)) ) ';
+         var src = '(  )   ';
          //  var src = ' (FIB (take(10)) (map(CONSOLE))) ';
          //var src = ' (SEQ  (iterate ())  (take(10)) (map(CONSOLE))) ';
 
