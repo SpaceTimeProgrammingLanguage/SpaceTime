@@ -129,15 +129,20 @@
              .replace(re2, '');
 
            //beautifly
-           var src4 = src3.replaceAll('\n', ' '); //linebreak -> single space
-           var src5 = src4.replaceAll('　', ' '); //zenkaku>hankaku
-           var src6 = src5.replace(/[　\s]+/g, ' '); // trim extra spaces
-           var src7 = src6.replace(/(\()\s+|\s+(\))/g, '$1$2'); //trim a space after '(' and before ')'.
-           var src8 = src7.replace(/(\[)\s+|\s+(\])/g, '$1$2'); //trim a space after '[' and before ']'.
-           var src9 = src8.replace(/(\S|^)\(/g, '$1 ('); //foo(  -> foo (
+           var src4 = src3.replaceAll('　', ' '); //zenkaku>hankaku
+
+           var src5 = src4.replaceAll('\n', ' '); //linebreak -> single space
+
+           var src6 = src5.replace(/(\S)\(/g, '$1 ('); //foo(  -> foo (
+           var src7 = src6.replace(/\)(\S)/g, ') $1'); //)foo  -> ) foo 
+
+           var src8 = src7.replace(/[　\s]+/g, ' '); // trim extra spaces
+           var src9 = src8.replace(/(\()\s+|\s+(\))/g, '$1$2'); //trim a space after '(' and before ')'.
+           var src10 = src9.replace(/(\[)\s+|\s+(\])/g, '$1$2'); //trim a space after '[' and before ']'.
 
 
-           return src9;
+
+           return src10;
 
          };
 
@@ -145,8 +150,8 @@
 
          var parse = M.parse = function(src)
          {
-           // M.$W('------------- parse ----------------');
-           // M.$W(src);
+           M.$L('------------- parse ----------------');
+           M.$L(src);
 
            var maybeNumberString = function(src)
            {
@@ -266,8 +271,9 @@
          // var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
          // var src = ' ( 1(+(2(+(3)))) (map(CONSOLE)) ) ';
 
+         var src = '((1 2( 3 (4) 9)0 )  (map (CONSOLE)) ) ';
          //  var src = ' (FIB (take(10)) (map(CONSOLE))) ';
-         var src = ' (SEQ  (iterate ())  (take(10)) (map(CONSOLE))) ';
+         //var src = ' (SEQ  (iterate ())  (take(10)) (map(CONSOLE))) ';
 
          // var src = ' (NATURAL  (take(10)) (map(CONSOLE))) ';
 
@@ -279,8 +285,8 @@
 
          M.debug = false;
          var src1 = parse(trim(src));
-         M.$L('src1 to mamMemory');
-         M.$L(src1);
+         //console.log('src1 to mamMemory');
+         // console.log(src1);
          M.map(src1, [M.MEMORY]);
 
 

@@ -1,10 +1,12 @@
 /* jslint node: true */
-/* global describe, it, before, beforeEach, after, afterEach */
+/* global $,describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
 
 var M = {};
 module.exports = M;
+
+var OUT;
 
 M.debug = false; //just default, change this value @ test or app.js
 var $W = M.$W = function(msg)
@@ -138,8 +140,14 @@ var $content = M.$content = function(seq)
 	return seq[0];
 };
 
-M.map = function(src, atr)
+M.map = function(src, atr, out)
 {
+
+	if (typeof out !== 'undefined')
+	{
+		OUT = out;
+	}
+
 	$L('map');
 	$L(src);
 	$L(atr);
@@ -267,8 +275,63 @@ M.map = function(src, atr)
 
 		var result = $mapMEMORY(src);
 
+		var parse = function(result)
+		{
+			var result1;
+			if ($type(result) === 'Array')
+			{
+				result1 = '( ';
+				for (var i = 0; i < result.length; i++)
+				{
+					result1 += parse(result[i]);
+					result1 += ' ';
+				}
+
+				result1 += ')';
+			}
+			else if ($type(result) === 'String')
+			{
+				result1 = '"' + result + '"';
+			}
+			else if ($type(result) === 'Function')
+			{
+				result1 = 'Function';
+			}
+			else
+			{
+				result1 = result;
+			}
+
+			return result1;
+		};
+
+		M.$L(M.$content(result));
+		var output = parse(M.$content(result));
+
+		var output1;
+
+		if ($type(output) === 'String')
+		{
+			if (output.substring(0, 1) === '"')
+				output1 = output.substring(1, output.length - 1);
+			else
+				output1 = output;
+		}
+		else
+		{
+			output1 = output;
+		}
+
 		M.$L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
-		M.$W(M.$content(result)); //side effect
+		M.$W(output1); //side effect
+
+		if (typeof $ !== 'undefined')
+		{
+			var content = $(OUT)
+				.html();
+			$(OUT)
+				.html(content + output1 + '<br>');
+		}
 
 		return result;
 	};

@@ -803,12 +803,14 @@ var iterate = function(src, likeFibf)
 module.exports = iterate;
 },{"./map":11}],11:[function(require,module,exports){
 /* jslint node: true */
-/* global describe, it, before, beforeEach, after, afterEach */
+/* global $,describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
 
 var M = {};
 module.exports = M;
+
+var OUT;
 
 M.debug = false; //just default, change this value @ test or app.js
 var $W = M.$W = function(msg)
@@ -942,8 +944,14 @@ var $content = M.$content = function(seq)
 	return seq[0];
 };
 
-M.map = function(src, atr)
+M.map = function(src, atr, out)
 {
+
+	if (typeof out !== 'undefined')
+	{
+		OUT = out;
+	}
+
 	$L('map');
 	$L(src);
 	$L(atr);
@@ -1061,7 +1069,7 @@ M.map = function(src, atr)
 		for (var i = 0; i < src.length; i++)
 		{
 			$mapMEMORY(src[i]);
-		}　
+		}
 		return true;
 	};
 
@@ -1071,8 +1079,63 @@ M.map = function(src, atr)
 
 		var result = $mapMEMORY(src);
 
+		var parse = function(result)
+		{
+			var result1;
+			if ($type(result) === 'Array')
+			{
+				result1 = '( ';
+				for (var i = 0; i < result.length; i++)
+				{
+					result1 += parse(result[i]);
+					result1 += ' ';
+				}
+
+				result1 += ')';
+			}
+			else if ($type(result) === 'String')
+			{
+				result1 = '"' + result + '"';
+			}
+			else if ($type(result) === 'Function')
+			{
+				result1 = 'Function';
+			}
+			else
+			{
+				result1 = result;
+			}
+
+			return result1;
+		};
+
+		M.$L(M.$content(result));
+		var output = parse(M.$content(result));
+
+		var output1;
+
+		if ($type(output) === 'String')
+		{
+			if (output.substring(0, 1) === '"')
+				output1 = output.substring(1, output.length - 1);
+			else
+				output1 = output;
+		}
+		else
+		{
+			output1 = output;
+		}
+
 		M.$L('<@@@@@@@@@@@@@@@@@ $mapCONSOLE OUTPUT @@@@@@@@@@@@@@@@@>');
-		M.$W(M.$content(result)); //side effect
+		M.$W(output1); //side effect
+
+		var content = $(OUT)
+			.html();
+		if (typeof $ !== 'undefined')
+		{
+			$(OUT)
+				.html(content + output1 + '<br>');
+		}
 
 		return result;
 	};
@@ -1357,12 +1420,16 @@ module.exports = take;
              .replace(re2, '');
 
            //beautifly
-           var src4 = src3.replaceAll('\n', ' '); //linebreak -> single space
-           var src5 = src4.replaceAll('　', ' '); //zenkaku>hankaku
-           var src6 = src5.replace(/[　\s]+/g, ' '); // trim extra spaces
-           var src7 = src6.replace(/(\()\s+|\s+(\))/g, '$1$2'); //trim a space after '(' and before ')'.
-           var src8 = src7.replace(/(\[)\s+|\s+(\])/g, '$1$2'); //trim a space after '[' and before ']'.
-           var src9 = src8.replace(/(\S|^)\(/g, '$1 ('); //foo(  -> foo (
+           var src4 = src3.replaceAll('　', ' '); //zenkaku>hankaku
+
+           var src5 = src4.replaceAll('\n', ' '); //linebreak -> single space
+
+           var src6 = src5.replace(/(\S)\(/g, '$1 ('); //foo(  -> foo (
+
+           var src7 = src6.replace(/[　\s]+/g, ' '); // trim extra spaces
+           var src8 = src7.replace(/(\()\s+|\s+(\))/g, '$1$2'); //trim a space after '(' and before ')'.
+           var src9 = src8.replace(/(\[)\s+|\s+(\])/g, '$1$2'); //trim a space after '[' and before ']'.
+
 
 
            return src9;
@@ -1373,8 +1440,8 @@ module.exports = take;
 
          var parse = M.parse = function(src)
          {
-           // M.$W('------------- parse ----------------');
-           // M.$W(src);
+           M.$L('------------- parse ----------------');
+           M.$L(src);
 
            var maybeNumberString = function(src)
            {
@@ -1494,8 +1561,9 @@ module.exports = take;
          // var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
          // var src = ' ( 1(+(2(+(3)))) (map(CONSOLE)) ) ';
 
+         var src = '((2 (4) "hi") (map(CONSOLE)) ) ';
          //  var src = ' (FIB (take(10)) (map(CONSOLE))) ';
-         var src = ' (SEQ  (iterate ())  (take(10)) (map(CONSOLE))) ';
+         //var src = ' (SEQ  (iterate ())  (take(10)) (map(CONSOLE))) ';
 
          // var src = ' (NATURAL  (take(10)) (map(CONSOLE))) ';
 
@@ -1507,8 +1575,8 @@ module.exports = take;
 
          M.debug = false;
          var src1 = parse(trim(src));
-         M.$L('src1 to mamMemory');
-         M.$L(src1);
+         //console.log('src1 to mamMemory');
+         // console.log(src1);
          M.map(src1, [M.MEMORY]);
 
 
@@ -1543,7 +1611,7 @@ var loadModulesFactory = function(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M)
 module.exports = loadModulesFactory;
 },{"./SpaceTime_Functions/FIB.js":5,"./SpaceTime_Functions/NATURAL.js":6,"./SpaceTime_Functions/SEQ.js":7,"./SpaceTime_Functions/doNothing.js":8,"./SpaceTime_Functions/ifF.js":9,"./SpaceTime_Functions/iterate.js":10,"./SpaceTime_Functions/minus.js":12,"./SpaceTime_Functions/plus.js":13,"./SpaceTime_Functions/take.js":14}],17:[function(require,module,exports){
 /* jslint node: true */
-/* global describe, it, before, beforeEach, after, afterEach */
+/* global jQuery,$, window, document, alert, describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
 
@@ -1566,4 +1634,74 @@ var src1 = M.parse(M.trim(src));
 M.$L('src1 to mamMemory');
 M.$L(src1);
 M.map(src1, [M.MEMORY]);
+
+$(document)
+	.ready(function()
+	{
+		init();
+	});
+
+var init = function()
+{
+	setTimeout(function()
+	{
+		$('#input1')
+			.focusEnd();
+	}, 2000);
+
+	$(document)
+		.on('click', '#btn1', function()
+		{
+			$('#output1')
+				.text('');
+
+			var src = $('#input1')
+				.text();
+
+			var src1 = M.parse(M.trim(src));
+			var result = M.map(src1, [M.MEMORY], '#output1');
+
+			$('#input1')
+				.focusEnd();
+
+		})
+		.on('click', '#btn2', function()
+		{
+			$('#output1')
+				.text('');
+
+			$('#input1')
+				.focusEnd();
+		});
+
+};
+
+
+$.fn.focusEnd = function()
+{
+	$(this)
+		.focus();
+	var tmp = $('<span />')
+		.appendTo($(this)),
+		node = tmp.get(0),
+		range = null,
+		sel = null;
+
+	if (document.selection)
+	{
+		range = document.body.createTextRange();
+		range.moveToElementText(node);
+		range.select();
+	}
+	else if (window.getSelection)
+	{
+		range = document.createRange();
+		range.selectNode(node);
+		sel = window.getSelection();
+		sel.removeAllRanges();
+		sel.addRange(range);
+	}
+	tmp.remove();
+	return this;
+}
 },{"../../app.js":15}]},{},[17])
