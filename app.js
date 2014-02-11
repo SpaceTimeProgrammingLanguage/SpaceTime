@@ -66,7 +66,7 @@
        return src1[src1.length - 1];
      };
 
-     var $trim = M.$trim = function(src)
+     var trim = function(src)
      {
 
        var strgs = src.match(/"(?:[^\\"]|\\.)*"/ig);
@@ -144,54 +144,16 @@
 
 
 
-     var $parse = M.$parse = function(src)
+     var arrays = function(src)
      {
-       // M.$W('------------- parse ----------------');
-       // M.$W(src);
+       M.$W('------------- parse ----------------');
+       M.$W(src);
 
-       var maybeNumberString = function(src)
+
+       var f1 = function(src)
        {
-         var s1 = src * 1;
-         var s2 = '' + s1;
-         if (src === s2) // naked number
-         {
-           return s1;
-         }
-         else if (src.indexOf('"') !== -1) // '"some string"'
-         {
-           return restoreMark(src.substring(1, src.length - 1));
-         }
-         else
-         {
-           var src1;
-
-           if (src === '+')
-             src1 = 'plus';
-           else if (src === '-')
-             src1 = 'minus';
-           else
-             src1 = src;
-
-           return M[src1];
-         }
-       };
-
-
-       //// M.$W("!!!!!!!!!!!src");
-       // M.$W(src.length);
-
-       if (src.indexOf('(') === -1)
-       {
-         return maybeNumberString(src);
-       }
-       else if ((src === '()') || (src === '() '))
-       {
-         //   M.$W('src === ()');
-         return [];
-       }
-       else
-       {
-         //  M.$W('some seq');
+         //   M.$W('some seq');
+         //    M.$W(src);
 
          var indexHead;
          var indexTail;
@@ -231,23 +193,21 @@
 
          }
 
-         //  M.$W(indexHead);
-         //  M.$W(indexTail);
+         //   M.$W(indexHead);
+         //   M.$W(indexTail);
          //  M.$W(space);
 
          var src1 = src.substring(indexHead + 1, indexTail);
-         // M.$W("-----------src1");
-         //  M.$W(src1);
+
 
          var array = [];
 
          if (space.length === 0)
          {
-           array[0] = maybeNumberString(src1);
+           array[0] = arrays(src1);
            // M.$W('---return');
-           // M.$W(array);
+           //  M.$W(array);
            return array;
-
          }
          else
          {
@@ -255,25 +215,137 @@
            {
              if (j === 0)
              {
-               array[array.length] = $parse(src.substring(indexHead + 1, space[j]));
+               array[array.length] = arrays(src.substring(indexHead + 1, space[j]));
              }
              if (j === space.length - 1)
              {
-               array[array.length] = $parse(src.substring(space[j] + 1, indexTail));
+               array[array.length] = arrays(src.substring(space[j] + 1, indexTail));
              }
              else
              {
-               array[array.length] = $parse(src.substring(space[j] + 1, space[j + 1]));
+               array[array.length] = arrays(src.substring(space[j] + 1, space[j + 1]));
              }
            }
-           M.$W('---return');
-           M.$W(array);
+           //  M.$W('---return');
+           //   M.$W(array);
 
            return array;
          }
+       };
+
+
+       //------------------
+       if (src === '')
+         return src;
+       else if (!src)
+         return src;
+       else if (src.indexOf('(') === -1)
+       {
+         return src;
+       }
+       else
+       {
+
+         var count = 0;
+         var otherCharactor = false;
+         for (var i = 0; i < src.length; i++)
+         {
+           if (src[i] === '(')
+           {
+             count++;
+           }
+           else if (src[i] === ')')
+           {
+             count--;
+           }
+           else if (src[i] === ' ')
+           {
+
+           }
+           else
+           {
+             otherCharactor = true;
+           }
+         }
+
+         if (count !== 0)
+         {
+           return 'error';
+         }
+         else if (otherCharactor)
+         {
+           return f1(src);
+         }
+         else
+         {
+           return [];
+         }
+
+       }
+     };
+
+     var maybeNumberString = function(src)
+     {
+       // console.log('maybeNumberString');
+       // console.log(src);
+
+       var s1 = src * 1;
+       var s2 = '' + s1;
+       if (src === s2) // naked number
+       {
+         return s1;
+       }
+       else if (src.indexOf('"') !== -1) // '"some string"'
+       {
+         return restoreMark(src.substring(1, src.length - 1));
+       }
+       else
+       {
+         var src1;
+
+         if (src === '+')
+           src1 = 'plus';
+         else if (src === '-')
+           src1 = 'minus';
+         else
+           src1 = src;
+
+         return M[src1];
        }
 
      };
+
+
+
+     var walk = function(src)
+     {
+       //  console.log('=======');
+       // console.log(src);
+
+       if (M.$type(src) !== 'Array')
+       {
+         return maybeNumberString(src);
+       }
+       else
+       {
+         var array = [];
+         for (var i = 0; i < src.length; i++)
+         {
+           //  console.log('-------');
+           //  console.log(src[i]);
+           array[i] = walk(src[i]);
+         }
+
+         return array;
+       }
+     };
+
+
+     var $parse = M.$parse = function(src)
+     {
+       return walk(arrays(trim(src)));
+     };
+      //======================================
 
      var $construct = M.$construct = function(result)
      {
@@ -305,12 +377,6 @@
        return result1;
      };
 
-
-
-      //======================================
-
-
-
      if (typeof describe === 'undefined')
      {
        loadModules(function()
@@ -321,9 +387,10 @@
 
          //============================================
          // var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
-         var src = ' ( 1(+(2(+(3)))) (map(CONSOLE)) ) ';
-
-         //var src = '(  )   ';
+         //var src = '    ( ((  ) )  8 ) ';
+         var src = '';
+         //var src = '(("hello   world"))';
+         //  var src = '  ( 2 (+(9))( 1 3 4) )    ';
          //  var src = ' (FIB (take(10)) (map(CONSOLE))) ';
          //var src = ' (SEQ  (iterate ())  (take(10)) (map(CONSOLE))) ';
 
@@ -336,11 +403,15 @@
          )*/
 
          M.debug = false;
-         var src1 = $parse($trim(src));
-         console.log('src1 to mamMemory');
-         console.log(src1);
-         M.map(src1, [M.MEMORY]);
+         var src1 = $parse(src);
 
+         //walkarray  //
+         //   console.log('src1 to mapEVAL');
+         console.log(src1);
+         var result = M.map(src1, [M.EVAL]);
+         M.$W(' === result === ');
+         M.$W(result);
+         M.$W($construct(result));
 
          //------------------------------------------------------------------
        });

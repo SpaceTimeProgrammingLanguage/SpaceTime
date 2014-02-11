@@ -34,7 +34,7 @@ var $L = M.$L = function(msg)
 	}
 };
 
-var MEMORY = M.MEMORY = 'MEMORY';
+var EVAL = M.EVAL = 'EVAL';
 var EACH = M.EACH = 'EACH';
 var CONSOLE = M.CONSOLE = 'CONSOLE';
 
@@ -70,7 +70,7 @@ var isNatveFunction = M.isNatveFunction = function(el)
 };
 
 
-//is Type Function is fundamental and used in $mapMEMORY, so cannot be exported
+//is Type Function is fundamental and used in $mapEVAL, so cannot be exported
 var isType = M.isType = function(src, atr)
 {
 	var clas;
@@ -151,14 +151,21 @@ M.map = function(src, atr, out)
 	$L('map');
 	$L(src);
 	$L(atr);
-	var $mapMEMORY = function(src)
+	var $mapEVAL = function(src)
 	{
 		$L('############## mapMEM ################');
 		$L('----------- src --------------');
 		$L(src);
 		$L('------------------------------');
-
-		if (isType(src, FUNCTION_SEQUENCE))
+		if (src === '')
+		{
+			return src;
+		}
+		else if (!src)
+		{
+			return src;
+		}
+		else if (isType(src, FUNCTION_SEQUENCE))
 		{
 			$L('@@@@@========  FUNCTION_SEQUENCE ======= @@@@@');
 			$L(src);
@@ -174,7 +181,7 @@ M.map = function(src, atr, out)
 			else if ((src.length === 1) && (src[0] === FUNCTION_COMPOSITION))
 			{
 				$L('!!!!!!!!!!!!!!=====================src === [FUNCTION_COMPOSITION]!!!!!!!!!!!!!!');
-				return $mapMEMORY($pop(FUNCTION_COMPOSITION));
+				return $mapEVAL($pop(FUNCTION_COMPOSITION));
 			}
 			else
 			{
@@ -230,7 +237,7 @@ M.map = function(src, atr, out)
 						// f = _f[0][1][0];
 						// result = f(srcsrc, atr); //plus([1],[2])
 
-						result = $mapMEMORY(f);
+						result = $mapEVAL(f);
 
 						$L('---result--------');
 						$L(result);
@@ -264,7 +271,7 @@ M.map = function(src, atr, out)
 		//$L(src);
 		for (var i = 0; i < src.length; i++)
 		{
-			$mapMEMORY(src[i]);
+			$mapEVAL(src[i]);
 		}
 		return true;
 	};
@@ -275,7 +282,7 @@ M.map = function(src, atr, out)
 	{
 		//$L(' ---$mapCONSOLE  fn ----- ');
 
-		var result = $mapMEMORY(src);
+		var result = $mapEVAL(src);
 
 		M.$L(M.$content(result));
 		var output = M.$construct(M.$content(result));
@@ -308,9 +315,9 @@ M.map = function(src, atr, out)
 		return result;
 	};
 
-	if ($content(atr) === MEMORY)
+	if ($content(atr) === EVAL)
 	{
-		return $mapMEMORY(src);
+		return $mapEVAL(src);
 	}
 	if ($content(atr) === EACH)
 	{
