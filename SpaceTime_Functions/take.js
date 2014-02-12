@@ -7,35 +7,51 @@ var M = require('./map');
 
 var take = function(src, atr)
 {
+	console.log('----take src---------');
+	M.$WL(src);
+
+	console.log('-------------');
+
 	var src1 = M.$content(M.map(src, [M.EVAL]));
 	var atr1 = M.$content(M.map(atr, [M.EVAL]));
 
-	if (M.isType(src1, M.DATA_SEQUENCE))
+	console.log('----take src1---------');
+	M.$WL(src1);
+
+	if (!src1.hasOwnProperty('iterate'))
 	{
-		M.$L('-----take src is Array');
+		M.$WL('-----take src is Array');
 		M.$L('-----src1');
 		M.$L(src1);
 		M.$L('-----atr1');
 		M.$L(atr1);
-
 		return [src1.slice(0, atr1)];
 	}
 	else
 	{
-		M.$L('-----take src is Object');
-		M.$L('' + src1);
+		var src2 = src1.iterate;
+		M.$WL('-----take src is Object');
+		M.$L('' + src2);
 
-		M.I = 0;
+		M.I.valOfI = 0;
 		var out = [];
+
 
 		while (true)
 		{
-			out[M.I] = M.SEQ[M.I] = src1();
+			console.log('-------------');
+			console.log(M.I.valOfI);
+			console.log(M.$mapEVAL(src2));
+			console.log('-------------');
+
+			out[M.I.valOfI] =
+				M.sequence[M.I.valOfI] = M.$content(M.$mapEVAL(src2));
+			//src1(i);
 
 			if (out.length === atr1)
 				return [out];
 
-			M.I++;
+			M.I.valOfI++;
 		}
 	}
 };

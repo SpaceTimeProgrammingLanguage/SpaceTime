@@ -15,14 +15,20 @@ var ifF = function(src, atr)
   M.$L('!!atr!!');
   M.$L(atr[0]); // [true]
 
-
-  if (M.$content(M.map(atr[0], [M.EVAL])))
+  var boolF = function(bool)
   {
-    return M.map(atr[1], [M.EVAL]);
+
+    return M.$content(M.$mapEVAL(bool));
+
+  };
+
+  if (boolF(atr[0]))
+  {
+    return M.$mapEVAL(atr[1]);
   }
   else
   {
-    return M.map(src, [M.EVAL]);
+    return [M.$mapEVAL((M.$content(src)))];
   }
 
 };

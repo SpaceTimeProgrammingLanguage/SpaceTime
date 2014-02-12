@@ -34,6 +34,24 @@ var $L = M.$L = function(msg)
 	}
 };
 
+
+var $WL = M.$WL = function(msg)
+{
+	if (typeof window === 'undefined')
+	{
+		var util = require('util');
+		console.log(util.inspect(msg,
+		{
+			depth: 99,
+			colors: true
+		}));
+	}
+	else
+	{
+		console.log(msg);
+	}
+};
+
 var EVAL = M.EVAL = 'EVAL';
 var EACH = M.EACH = 'EACH';
 var CONSOLE = M.CONSOLE = 'CONSOLE';
@@ -50,6 +68,12 @@ var VAL = M.VAL = function(index)
 		wrapped_value: []
 	});
 };
+
+var EQUAL = M.EQUAL = 'EQUAL';
+var GREATER = M.GREATER = 'GREATER';
+var LESS = M.LESS = 'LESS';
+var GREATEREQUAL = M.GREATEREQUAL = 'GREATEREQUAL';
+var LESSEQUAL = M.LESSEQUAL = 'LESSEQUAL';
 
 
 
@@ -151,12 +175,18 @@ M.map = function(src, atr, out)
 	$L('map');
 	$L(src);
 	$L(atr);
-	var $mapEVAL = function(src)
+	var $mapEVAL = M.$mapEVAL = function(src)
 	{
-		$L('############## mapMEM ################');
+		$W('############## mapMEM ################');
 		$L('----------- src --------------');
-		$L(src);
+		$W(src);
 		$L('------------------------------');
+
+		if (isType(src, 'Boolean'))
+		{
+			$W('boolean');
+		}
+
 		if (src === '')
 		{
 			return src;
@@ -192,9 +222,16 @@ M.map = function(src, atr, out)
 
 				if (!isType(lastElement, FUNCTION_SEQUENCE))
 				{
-					$L('@@@@@ unOperatable DATA_SEQUENCE @@@@@');
-					$L(src);
-					return src;
+					$W('@@@@@ unOperatable DATA_SEQUENCE @@@@@');
+					$W(src);
+					if ($content(src)
+						.hasOwnProperty('valOfI'))
+					{
+						return [$content(src)
+							.valOfI];
+					}
+					else
+						return src;
 				}
 				else
 				{
@@ -257,6 +294,10 @@ M.map = function(src, atr, out)
 			if (src.hasOwnProperty('wrapped_value'))
 			{
 				return $pop(src.wrapped_value);
+			}
+			else if (src.hasOwnProperty('valOfI'))
+			{
+				return src.valOfI;
 			}
 			else
 			{

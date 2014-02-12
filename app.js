@@ -286,8 +286,8 @@
 
      var maybeNumberString = function(src)
      {
-       // console.log('maybeNumberString');
-       // console.log(src);
+       console.log('maybeNumberString');
+       console.log(src);
 
        var s1 = src * 1;
        var s2 = '' + s1;
@@ -307,9 +307,20 @@
            src1 = 'plus';
          else if (src === '-')
            src1 = 'minus';
+         else if (src === '==')
+           src1 = 'EQUAL';
+         else if (src === '>')
+           src1 = 'GREATER';
+         else if (src === '<')
+           src1 = 'LESS';
+         else if (src === '>=')
+           src1 = 'GREATEREQUAL';
+         else if (src === '<=')
+           src1 = 'LESSEQUAL';
          else
            src1 = src;
 
+         console.log(src1);
          return M[src1];
        }
 
@@ -389,8 +400,8 @@
          // var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
          //var src = '    ( ((  ) )  8 ) ';
          // var src = '';
-         var src = '(("hello   world"))';
-         var src = '  ( 2 (+(9)) )    ';
+         // var src = '(("hello   world"))';
+         // var src = '  ( 2 (+(9)) )    ';
          //  var src = ' (FIB (take(10)) (map(CONSOLE))) ';
          //var src = ' (SEQ  (iterate ())  (take(10)) (map(CONSOLE))) ';
 
@@ -401,12 +412,23 @@
              (ifF((i <= 1)(1))))
 
          )*/
+         //  var src = '( (1 2 3 4 5)      (take(4))   (take(2)))';
+         // var src = '( () (iterate ( I ) ) (take(10)) )';
+         var src = '(5 (ifF  ((10 (bool (>= (11) )))  9)   )  )';
+
+         var src = '( () (iterate (I (ifF  ((I (bool (<= (4) )))  (1))   )  ) ) (take(10)) )';
+
+         //var src = '(10 (bool (>= (10) )))';
 
          M.debug = false;
          var src1 = $parse(src);
 
-         //walkarray  //
-         //   console.log('src1 to mapEVAL');
+         /*  src1 = [
+          5,
+          [M.ifF, [[false], [1]]]
+        ];*/
+
+         //  src1 = [10, [M.bool, [M.GREATEREQUAL, [10]]]];
          console.log(src1);
          var result = M.map(src1, [M.EVAL]);
          M.$W(' === result === ');
