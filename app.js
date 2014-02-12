@@ -388,9 +388,9 @@
          //============================================
          // var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
          //var src = '    ( ((  ) )  8 ) ';
-         var src = '';
-         //var src = '(("hello   world"))';
-         //  var src = '  ( 2 (+(9))( 1 3 4) )    ';
+         // var src = '';
+         var src = '(("hello   world"))';
+         var src = '  ( 2 (+(9)) )    ';
          //  var src = ' (FIB (take(10)) (map(CONSOLE))) ';
          //var src = ' (SEQ  (iterate ())  (take(10)) (map(CONSOLE))) ';
 

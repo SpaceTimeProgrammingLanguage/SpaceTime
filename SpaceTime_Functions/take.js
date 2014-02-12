@@ -7,8 +7,8 @@ var M = require('./map');
 
 var take = function(src, atr)
 {
-	var src1 = M.$content(M.map(src, [M.MEMORY]));
-	var atr1 = M.$content(M.map(atr, [M.MEMORY]));
+	var src1 = M.$content(M.map(src, [M.EVAL]));
+	var atr1 = M.$content(M.map(atr, [M.EVAL]));
 
 	if (M.isType(src1, M.DATA_SEQUENCE))
 	{
@@ -25,17 +25,17 @@ var take = function(src, atr)
 		M.$L('-----take src is Object');
 		M.$L('' + src1);
 
-		M.SEQ.i = 0;
+		M.I = 0;
 		var out = [];
 
 		while (true)
 		{
-			out[M.SEQ.i] = M.SEQ[M.SEQ.i] = src1();
+			out[M.I] = M.SEQ[M.I] = src1();
 
 			if (out.length === atr1)
 				return [out];
 
-			M.SEQ.i++;
+			M.I++;
 		}
 	}
 };

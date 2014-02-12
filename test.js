@@ -37,7 +37,8 @@ describe('======================================================================
                     {
                         var src = [];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([]);
                     });
 
@@ -56,7 +57,8 @@ describe('======================================================================
                     {
                         var src = [5];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([5]);
                     });
             });
@@ -73,7 +75,8 @@ describe('======================================================================
                     {
                         var src = [5, 7];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([5, 7]);
                     });
             });
@@ -90,7 +93,8 @@ describe('======================================================================
                     {
                         var src = [5, 7, 3];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([5, 7, 3]);
                     });
             });
@@ -109,7 +113,8 @@ describe('======================================================================
                     {
                         var src = [1, [2, 3]];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([1, [2, 3]]);
                     });
             });
@@ -127,7 +132,8 @@ describe('======================================================================
                     {
                         var src = ["hello world"];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql(["hello world"]);
                     });
             });
@@ -149,7 +155,8 @@ describe('======================================================================
                                       [M.map, [M.CONSOLE]]
                                  ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql(["hello world"]);
                     });
             });
@@ -171,7 +178,8 @@ describe('======================================================================
                                           [M.map, [M.CONSOLE]]
                                      ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql(["hello world"]);
                     });
             });
@@ -191,7 +199,8 @@ describe('======================================================================
                               [M.map, [M.CONSOLE]]
                          ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([[1, 2, 3]]);
                     });
             });
@@ -210,7 +219,8 @@ describe('======================================================================
                     {
                         var src = [1, [M.plus, [2]]];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([3]);
                     });
             });
@@ -227,7 +237,8 @@ describe('======================================================================
                     {
                         var src = [1, [M.plus, [2]], [M.map, [M.CONSOLE]]];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([3]);
                     });
             });
@@ -250,7 +261,8 @@ describe('======================================================================
                                [M.plus, [3]]
                             ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([6]);
                     });
             });
@@ -273,7 +285,8 @@ describe('======================================================================
                                [M.plus, [5]]
                             ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([11]);
                     });
             });
@@ -296,7 +309,8 @@ describe('======================================================================
 
                             ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([9]);
                     });
             });
@@ -318,7 +332,8 @@ describe('======================================================================
                                 [M.plus, [2]]
                             ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([[5]]);
                     });
             });
@@ -341,7 +356,8 @@ describe('======================================================================
                                 [M.plus, [2]]
                             ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([[6]]);
                     });
             });
@@ -364,7 +380,7 @@ describe('======================================================================
                                 [M.plus, [2]]
                             ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL]))
                             .to.eql([[3, 4, 5]]);
                     });
             });
@@ -387,7 +403,8 @@ describe('======================================================================
                                 [M.take, [3]]
                             ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([[1, 2, 3]]);
                     });
             });
@@ -412,7 +429,8 @@ describe('======================================================================
 
                                 ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]);
                     });
             });
@@ -435,7 +453,8 @@ describe('======================================================================
 
                                 ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]]);
                     });
             });
@@ -460,7 +479,8 @@ describe('======================================================================
 
                                 ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql(
                                 [[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]]);
                     });
@@ -482,7 +502,8 @@ describe('======================================================================
                               [M.ifF, [[true], [2]]]
                           ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([2]);
                     });
             });
@@ -503,7 +524,8 @@ describe('======================================================================
                             [M.ifF, [[true], [2]]]
                          ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([2]);
                     });
             });
@@ -524,7 +546,8 @@ describe('======================================================================
                             [M.ifF, [[false], [2]]]
                          ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([1]);
                     });
             });
@@ -545,7 +568,8 @@ describe('======================================================================
                             [M.ifF, [[false], [2]]]
                          ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([0]);
                     });
             });
@@ -577,7 +601,8 @@ describe('======================================================================
                                      [M.map, [M.CONSOLE]]
                                 ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([20]);
                     });
             });
@@ -609,7 +634,8 @@ describe('======================================================================
                               [M.doNothing, []]
                           ];
 
-                        expect(M.map(src, [M.MEMORY]))
+                        expect(M.map(src, [M.EVAL
+]))
                             .to.eql([]);
                     });
             });

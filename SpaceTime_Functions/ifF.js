@@ -16,13 +16,13 @@ var ifF = function(src, atr)
   M.$L(atr[0]); // [true]
 
 
-  if (M.$content(M.map(atr[0], [M.MEMORY])))
+  if (M.$content(M.map(atr[0], [M.EVAL])))
   {
-    return M.map(atr[1], [M.MEMORY]);
+    return M.map(atr[1], [M.EVAL]);
   }
   else
   {
-    return M.map(src, [M.MEMORY]);
+    return M.map(src, [M.EVAL]);
   }
 
 };

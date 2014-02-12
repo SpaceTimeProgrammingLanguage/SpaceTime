@@ -2,12 +2,40 @@
 /* global describe, it, before, beforeEach, after, afterEach */
 
 'use strict';
-var SEQ = {};
+var M = require('./map');
 
-SEQ.i = 0;
-SEQ.n = function(i)
+var seq = {};
+
+M.I = 0;
+
+
+M.N = function(i)
 {
-	return SEQ[SEQ.i + i];
+	return seq[M.I + i];
 };
+
+var SEQ = function(src, likeFibf)
+{
+	//var Seq = M.$content(SEQ);
+
+	M.$L('=======ITERATE================');
+	M.$L(M.SEQ);
+
+	var F = function()
+	{
+		if (M.I <= 1)
+		{
+			return 1;
+		}
+		else
+		{
+			return M.N(-2) + M.N(-1);
+		}
+	};
+
+
+	return [F];
+};
+
 
 module.exports = SEQ;
