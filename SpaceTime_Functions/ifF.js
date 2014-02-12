@@ -28,7 +28,7 @@ var ifF = function(src, atr)
   }
   else
   {
-    return [M.$mapEVAL((M.$content(src)))];
+    return [M.$content(M.$mapEVAL(src))];
   }
 
 };
