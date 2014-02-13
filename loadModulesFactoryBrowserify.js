@@ -4,6 +4,7 @@ var loadModulesFactory = function(SpaceTime_FunctionsDIR, SpaceTime_coreFile, M)
     M: M,
     func: function(f)
     {
+      M.bool = require('./SpaceTime_Functions/bool.js');
       M.doNothing = require('./SpaceTime_Functions/doNothing.js');
       M.FIB = require('./SpaceTime_Functions/FIB.js');
       M.ifF = require('./SpaceTime_Functions/ifF.js');
