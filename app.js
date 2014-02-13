@@ -418,9 +418,9 @@
          // var src = '( () (iterate ( I ) ) (take(10)) )';
          //  var src = '(5 (ifF  ((10 (bool (>= (11) )))  9)   )  )';
 
-         // var src = '( () (iterate (I (if ((I (bool (<= (4) )))  (1))   )  ) ) (take(10)) )';
+         var src = '( () (iterate (I (if ((I (<= (4) ))  (1))   )  ) ) (take(10)) )';
 
-         var src = '(3 (== (3)))';
+         //var src = '(3 (== (3)))';
          //var src = '(10 (bool (>= (10) )))';
 
          M.debug = false;
