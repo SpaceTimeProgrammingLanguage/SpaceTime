@@ -307,6 +307,8 @@
            src1 = 'plus';
          else if (src === '-')
            src1 = 'minus';
+         else if (src === 'if')
+           src1 = 'ifF';
          else if (src === '==')
            src1 = 'EQUAL';
          else if (src === '>')
@@ -416,7 +418,7 @@
          // var src = '( () (iterate ( I ) ) (take(10)) )';
          //  var src = '(5 (ifF  ((10 (bool (>= (11) )))  9)   )  )';
 
-         var src = '( () (iterate (I (ifF  ((I (bool (<= (4) )))  (1))   )  ) ) (take(10)) )';
+         var src = '( () (iterate (I (if ((I (bool (<= (4) )))  (1))   )  ) ) (take(10)) )';
 
          //var src = '(10 (bool (>= (10) )))';
 
