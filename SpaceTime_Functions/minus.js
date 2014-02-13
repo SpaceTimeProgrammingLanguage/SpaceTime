@@ -5,11 +5,8 @@
 
 var M = require('./map');
 
-var minus = function(src, atr)
-{
-	var result = src - atr;
+var minus = function(src, atr) {
 
-	return result;
 };
 
 module.exports = minus;

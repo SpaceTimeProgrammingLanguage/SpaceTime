@@ -310,15 +310,15 @@
          else if (src === 'if')
            src1 = 'ifF';
          else if (src === '==')
-           src1 = 'EQUAL';
+           src1 = 'boolEqual';
          else if (src === '>')
-           src1 = 'GREATER';
+           src1 = 'boolGreater';
          else if (src === '<')
-           src1 = 'LESS';
+           src1 = 'boolLess';
          else if (src === '>=')
-           src1 = 'GREATEREQUAL';
+           src1 = 'boolGreaterEqual';
          else if (src === '<=')
-           src1 = 'LESSEQUAL';
+           src1 = 'boolLessEqual';
          else
            src1 = src;
 
@@ -418,8 +418,9 @@
          // var src = '( () (iterate ( I ) ) (take(10)) )';
          //  var src = '(5 (ifF  ((10 (bool (>= (11) )))  9)   )  )';
 
-         var src = '( () (iterate (I (if ((I (bool (<= (4) )))  (1))   )  ) ) (take(10)) )';
+         // var src = '( () (iterate (I (if ((I (bool (<= (4) )))  (1))   )  ) ) (take(10)) )';
 
+         var src = '(3 (== (3)))';
          //var src = '(10 (bool (>= (10) )))';
 
          M.debug = false;
