@@ -12,17 +12,18 @@ var ifF = function(src, atr)
   M.$L(src);
   M.$L(M.$type(src) === 'Array');
 
-  M.$L('!!atr!!');
-  M.$L(atr[0]); // [true] 
 
-  if (M.$content(M.$mapEVAL(atr[0])))
+  ///-------
+  if(M.$mapEVAL(src))
   {
-    return M.$mapEVAL(atr[1]);
+    return M.$mapEVAL(atr[0]);
   }
   else
   {
-    return M.$mapEVAL(src);
+    return M.$mapEVAL(atr[1]);
   }
+
+
 
 };
 

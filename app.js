@@ -416,12 +416,12 @@
          )*/
          //  var src = '( (1 2 3 4 5)      (take(4))   (take(2)))';
          // var src = '( () (iterate ( I ) ) (take(10)) )';
-         //  var src = '(5 (ifF  ((10 (bool (>= (11) )))  9)   )  )';
+         var src = '(5 (ifF  ((10 (>= (11) ))  9)   )  )';
 
-         var src = '( () (iterate (I (if ((I (<= (4) ))  (1))   )  ) ) (take(10)) )';
+         //  var src = '( () (iterate (I (if ((I (<= (4) ))  (1))   )  ) ) (take(10)) )';
 
          //var src = '(3 (== (3)))';
-         //var src = '(10 (bool (>= (10) )))';
+         // var src = '("foo" if(true) ("bar") ))';
 
          M.debug = false;
          var src1 = $parse(src);
