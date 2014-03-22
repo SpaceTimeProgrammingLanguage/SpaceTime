@@ -3,12 +3,10 @@
   "version": "0.2.0",
   "description": "SpaceTime =========",
   "main": "app.js",
-  "scripts":
-  {
+  "scripts": {
     "test": "mocha --reporter spec test.js"
   },
-  "repository":
-  {
+  "repository": {
     "type": "git",
     "url": "https://github.com/SpaceTimeProgrammingLanguage/SpaceTime"
   },
@@ -20,17 +18,13 @@
   ],
   "author": "Ken OKABE",
   "license": "MIT",
-  "bugs":
-  {
+  "bugs": {
     "url": "https://github.com/SpaceTimeProgrammingLanguage/SpaceTime/issues"
   },
   "homepage": "http://spacetimeprogramminglanguage.github.io",
-  "dependencies":
-  {},
-  "devDependencies":
-  {
+  "dependencies": {},
+  "devDependencies": {
     "mocha": "*",
     "chai": "*"
-
   }
 }

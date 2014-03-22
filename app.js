@@ -130,7 +130,7 @@
        var src5 = src4.replaceAll('\n', ' '); //linebreak -> single space
 
        var src6 = src5.replace(/(\S)\(/g, '$1 ('); //foo(  -> foo (
-       var src7 = src6.replace(/\)(\S)/g, ') $1'); //)foo  -> ) foo 
+       var src7 = src6.replace(/\)(\S)/g, ') $1'); //)foo  -> ) foo
 
        var src8 = src7.replace(/[　\s]+/g, ' '); // trim extra spaces
        var src9 = src8.replace(/(\()\s+|\s+(\))/g, '$1$2'); //trim a space after '(' and before ')'.
@@ -416,7 +416,7 @@
          )*/
          //  var src = '( (1 2 3 4 5)      (take(4))   (take(2)))';
          // var src = '( () (iterate ( I ) ) (take(10)) )';
-         var src = '(5 (ifF  ((10 (>= (11) ))  9)   )  )';
+         var src = '( 3 (==(1))　  (  if (  ("match")  ("unmatch")   )  ) )';
 
          //  var src = '( () (iterate (I (if ((I (<= (4) ))  (1))   )  ) ) (take(10)) )';
 
